@@ -21,8 +21,13 @@ dependencies {
 gradlePlugin {
     plugins {
         register("androidFeature") {
-            id = "com.example.convention.feature"
+            id = "photomap.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
+        register("androidHilt") {
+            id = "photomap.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
     }
+
 }

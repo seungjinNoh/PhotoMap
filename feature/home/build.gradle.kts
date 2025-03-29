@@ -1,11 +1,10 @@
 plugins {
     id("photomap.android.feature")
-    id("photomap.android.hilt")
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.splash"
+    namespace = "com.example.home"
 }
 
 dependencies {
@@ -16,6 +15,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.accompanitst)
 }

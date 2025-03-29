@@ -30,3 +30,7 @@ rootProject.name = "PhotoMap"
 include(":app")
 include(":feature")
 include(":feature:splash")
+include(":core")
+include(":core")
+include(":core:designsystem")
+include(":feature:home")
