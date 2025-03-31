@@ -28,6 +28,14 @@ gradlePlugin {
             id = "photomap.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidLibraryCompose") {
+            id = "photomap.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
+        register("androidLibrary") {
+            id = "photomap.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
     }
 
 }
