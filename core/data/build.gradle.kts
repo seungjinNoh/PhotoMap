@@ -1,33 +1,22 @@
+import java.util.Properties
+
 plugins {
     id("photomap.android.library")
 }
 
 android {
     namespace = "com.example.data"
-    compileSdk = 35
+    buildFeatures {
+        buildConfig = true
+    }
+
 
     defaultConfig {
-        minSdk = 24
+        val w3wApiKey = project.rootProject.file("local.properties").inputStream().use {
+            Properties().apply { load(it) }
+        }.getProperty("W3W_API_KEY") ?: ""
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+        buildConfigField("String", "W3W_API_KEY", "\"$w3wApiKey\"")
     }
 }
 
@@ -39,4 +28,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.w3w)
 }
