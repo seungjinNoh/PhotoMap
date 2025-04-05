@@ -2,7 +2,9 @@ import com.android.build.gradle.LibraryExtension
 import com.example.convention.compose.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
@@ -13,6 +15,14 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+            }
+
+            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
+            dependencies {
+                add("implementation", libs.findLibrary("kotlinx.serialization.json").get())
+                add("implementation", libs.findLibrary("jakewharton.retrofit").get())
+                add("implementation", project(":core:model"))
             }
 
             extensions.configure<LibraryExtension> {
