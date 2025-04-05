@@ -22,6 +22,7 @@ hilt-navigation = "1.2.0"
 hilt-compiler = "2.55"
 ksp = "2.1.0-1.0.29"
 w3w = "4.0.0"
+jakewharton = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -62,6 +63,7 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt-compiler" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 w3w = { group = "com.what3words", name = "w3w-android-wrapper", version.ref = "w3w"}
+jakewharton-retrofit = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "jakewharton" }
 
 
 [plugins]
