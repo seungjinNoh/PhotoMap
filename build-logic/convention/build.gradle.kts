@@ -20,6 +20,14 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("androidApplicationCompose") {
+            id = "photomap.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
+        register("androidApplication") {
+            id = "photomap.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
         register("androidFeature") {
             id = "photomap.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
