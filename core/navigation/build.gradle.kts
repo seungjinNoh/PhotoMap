@@ -1,10 +1,10 @@
 plugins {
     id("photomap.android.library")
-    id("photomap.android.hilt")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.data"
+    namespace = "com.example.navigation"
 }
 
 dependencies {
@@ -15,9 +15,4 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-
-    implementation(libs.w3w)
-    implementation(project(":core:network"))
-    implementation(project(":core:model"))
-
 }

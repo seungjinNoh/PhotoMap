@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.w3w)
+    implementation(project(":core:model"))
 }

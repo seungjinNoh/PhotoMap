@@ -22,5 +22,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(projects.feature.splash)
     implementation(projects.feature.home)
+    implementation(projects.core.navigation)
 
 }
