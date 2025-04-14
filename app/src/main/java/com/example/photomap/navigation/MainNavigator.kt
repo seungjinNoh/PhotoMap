@@ -46,7 +46,12 @@ internal class MainNavigator(
     }
 
     fun navigateHome() {
-        navController.navigateHome()
+        val navOption = navOptions {
+            popUpTo(navController.graph.findStartDestination().id) {
+                inclusive = true
+            }
+        }
+        navController.navigateHome(navOption)
     }
 
     @Composable

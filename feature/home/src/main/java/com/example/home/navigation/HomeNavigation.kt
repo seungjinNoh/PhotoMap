@@ -11,12 +11,6 @@ fun NavController.navigateHome(navOptions: NavOptions) {
     navigate(MainTabRoute.Home, navOptions)
 }
 
-fun NavController.navigateHome() {
-    navigate(MainTabRoute.Home) {
-        popUpTo(id = 0) { inclusive = true }
-    }
-}
-
 fun NavGraphBuilder.homeNavGraph() {
     composable<MainTabRoute.Home> {
         HomeRoute()
