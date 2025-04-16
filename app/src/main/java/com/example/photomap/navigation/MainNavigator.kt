@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.example.home.navigation.navigateHome
+import com.example.map.navigation.navigateMap
 import com.example.navigation.Route
 import com.example.photomap.MainTab
 
@@ -40,7 +41,7 @@ internal class MainNavigator(
         when (tab) {
             // todo 각각의 navigate로 바꾸기
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.MAP -> navController.navigateHome(navOptions)
+            MainTab.MAP -> navController.navigateMap(navOptions)
             MainTab.SEARCH -> navController.navigateHome(navOptions)
         }
     }

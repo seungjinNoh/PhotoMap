@@ -25,7 +25,7 @@ fun PhotoMapMain() {
             MainBottomBar(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .padding(start = 8.dp, end = 8.dp, bottom = 28.dp),
+                    .padding(bottom = 20.dp),
                 visible = mainNavigator.shouldShowBottomBar(),
                 tabs = MainTab.entries.toPersistentList(),
                 currentTab = mainNavigator.currentTab,

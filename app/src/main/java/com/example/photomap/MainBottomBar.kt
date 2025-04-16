@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -48,17 +47,9 @@ internal fun MainBottomBar(
             modifier = modifier
                 .fillMaxWidth()
                 .height(56.dp)
-                .border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.outline,
-                    shape = RoundedCornerShape(size = 28.dp),
-                )
-                .background(
-                    color = MaterialTheme.colorScheme.surface,
-                    shape = RoundedCornerShape(28.dp),
-                )
                 .padding(horizontal = 28.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             tabs.forEach { tab ->
                 MainBottomBarItem(
