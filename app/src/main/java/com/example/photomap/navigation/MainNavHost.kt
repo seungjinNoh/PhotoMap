@@ -3,8 +3,8 @@ package com.example.photomap.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
+import com.example.edit.navigation.editNavGraph
 import com.example.home.navigation.homeNavGraph
 import com.example.map.navigation.mapNavGraph
 import com.example.splash.navigation.splashNavGraph
@@ -22,7 +22,12 @@ internal fun MainNavHost(
     ) {
 
         splashNavGraph(navigateHome = { mainNavigator.navigateHome() })
-        homeNavGraph()
+        homeNavGraph(
+            onEditClick = { mainNavigator.navigateEdit() }
+        )
         mapNavGraph()
+        editNavGraph(
+          onBackClick = mainNavigator::popBackStack
+        )
     }
 }

@@ -10,6 +10,9 @@ sealed interface Route {
     @Serializable
     data object Edit : Route
 
+    @Serializable
+    data object SelectLocation : Route
+
 }
 
 sealed interface MainTabRoute : Route {

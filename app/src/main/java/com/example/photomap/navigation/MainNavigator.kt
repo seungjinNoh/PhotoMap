@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.example.edit.navigation.navigateEdit
 import com.example.home.navigation.navigateHome
 import com.example.map.navigation.navigateMap
 import com.example.navigation.Route
@@ -53,6 +54,14 @@ internal class MainNavigator(
             }
         }
         navController.navigateHome(navOption)
+    }
+
+    fun navigateEdit() {
+        navController.navigateEdit()
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
     }
 
     @Composable
