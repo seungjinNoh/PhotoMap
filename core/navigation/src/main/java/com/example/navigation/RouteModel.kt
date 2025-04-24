@@ -11,7 +11,7 @@ sealed interface Route {
     data object Edit : Route
 
     @Serializable
-    data object SelectLocation : Route
+    data class SelectLocation(val latitude: Double, val longitude: Double) : Route
 
 }
 

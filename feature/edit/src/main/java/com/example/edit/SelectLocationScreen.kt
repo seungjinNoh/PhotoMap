@@ -5,7 +5,9 @@ import androidx.compose.runtime.Composable
 
 @Composable
 internal fun SelectLocationScreen(
+    latitude: Double,
+    longitude: Double,
     onBackClick: () -> Unit
 ) {
-    Text("Select Location Screen")
+    Text("Select Location Screen: $latitude / $longitude")
 }

@@ -27,7 +27,8 @@ internal fun MainNavHost(
         )
         mapNavGraph()
         editNavGraph(
-          onBackClick = mainNavigator::popBackStack
+            onBackClick = mainNavigator::popBackStack,
+            onSelectLocationClick = { mainNavigator.navigateSelectLocation(it.latitude, it.longitude) }
         )
     }
 }
