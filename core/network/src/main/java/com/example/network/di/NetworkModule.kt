@@ -6,14 +6,16 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkModule {
+abstract class NetworkModule {
 
     @Binds
-    fun bindW3WDataSource(
-        w3wRemoteSource: FakeW3WDataSource
+    @Singleton
+    abstract fun bindW3WDataSource(
+        w3wDataSource: FakeW3WDataSource
     ) : W3WDataSource
 
 }

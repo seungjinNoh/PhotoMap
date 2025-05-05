@@ -17,7 +17,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.w3w)
-    implementation(project(":core:network"))
-    implementation(project(":core:model"))
+    implementation(projects.core.network)
+    implementation(projects.core.model)
 
 }

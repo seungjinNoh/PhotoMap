@@ -25,5 +25,6 @@ dependencies {
     implementation(projects.feature.map)
     implementation(projects.feature.edit)
     implementation(projects.core.navigation)
+    implementation(projects.core.model)
 
 }
