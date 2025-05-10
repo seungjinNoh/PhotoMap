@@ -84,7 +84,8 @@ fun EditScreen(
             w3w = photo.w3w,
             onRemoveTag = { tag -> viewModel.updateTags(photo.tags - tag) },
             description = photo.description,
-            onDescriptionChange = viewModel::updateDescription
+            onDescriptionChange = viewModel::updateDescription,
+            onSelectLocationClick = onSelectLocationClick
         )
     } else {
         // 로딩 중 혹은 상태 없음
@@ -104,6 +105,7 @@ fun EditContent(
     onRemoveTag: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
+    onSelectLocationClick: (Route.SelectLocation) -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         OutlinedTextField(
@@ -192,7 +194,9 @@ fun EditContent(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        // TODO: onMapClick() 호출 예정
+                        val latitude = 0.0
+                        val longitude = 0.0
+                        onSelectLocationClick(Route.SelectLocation(latitude, longitude))
                     }
             )
         }

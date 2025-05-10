@@ -24,6 +24,8 @@ ksp = "2.1.0-1.0.29"
 w3w = "4.0.0"
 jakewharton = "1.0.0"
 kotlinxImmutable = "0.3.8"
+google-map = "2.11.4"
+google-map-sdk = "18.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +68,8 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 w3w = { group = "com.what3words", name = "w3w-android-wrapper", version.ref = "w3w"}
 jakewharton-retrofit = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "jakewharton" }
 kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "google-map" }
+google-maps-sdk = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "google-map-sdk" }
 
 
 [plugins]

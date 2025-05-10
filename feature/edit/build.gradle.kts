@@ -18,4 +18,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(projects.core.domain)
+    implementation(libs.maps.compose)
+    implementation(libs.google.maps.sdk)
 }

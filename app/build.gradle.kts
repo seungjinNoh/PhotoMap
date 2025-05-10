@@ -6,6 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.photomap"
+
+    defaultConfig {
+        manifestPlaceholders["google_maps_key"] =
+            System.getenv("GOOGLE_MAPS_API_KEY") ?: project.findProperty("GOOGLE_MAPS_API_KEY")
+                    ?: ""
+    }
 }
 
 dependencies {
