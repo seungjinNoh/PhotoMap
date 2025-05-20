@@ -26,8 +26,8 @@ fun HomeScreen(
                 description = "25년 봄 한강 야경",
                 photoUri = "이미지 경로",
                 w3w = "책상/의자/노트북",
-                latitude = 123.123,
-                longitude = 456.456
+                latitude = 36.123,
+                longitude = 127.456
             )
             onEditClick(photoInfo)
         }) {

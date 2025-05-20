@@ -26,6 +26,7 @@ jakewharton = "1.0.0"
 kotlinxImmutable = "0.3.8"
 google-map = "2.11.4"
 google-map-sdk = "18.2.0"
+playServicesLocation = "21.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +71,7 @@ jakewharton-retrofit = { group = "com.jakewharton.retrofit", name = "retrofit2-k
 kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "google-map" }
 google-maps-sdk = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "google-map-sdk" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 
 
 [plugins]

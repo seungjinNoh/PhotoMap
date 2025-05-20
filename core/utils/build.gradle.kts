@@ -1,11 +1,10 @@
 plugins {
-    id("photomap.android.feature")
+    id("photomap.android.library")
     id("photomap.android.hilt")
-    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.edit"
+    namespace = "com.example.utils"
 }
 
 dependencies {
@@ -17,8 +16,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(projects.core.domain)
-    implementation(libs.maps.compose)
-    implementation(libs.google.maps.sdk)
-    implementation(projects.core.utils)
+    implementation(libs.play.services.location)
 }

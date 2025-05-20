@@ -15,14 +15,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditViewModel @Inject constructor(
-    private val getW3WUseCase: GetW3WUseCase
+    internal val getW3WUseCase: GetW3WUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<EditUiState>(EditUiState.Loading)
     val uiState: StateFlow<EditUiState> = _uiState
 
     fun createNewPhoto() {
-        _uiState.value = EditUiState.Empty
+        _uiState.value = EditUiState.Success(
+            PhotoInfo()
+        )
     }
 
     fun editExistingPhoto(photoInfo: PhotoInfo) {
@@ -62,7 +64,7 @@ class EditViewModel @Inject constructor(
         }
     }
 
-    fun updateLocation(latitude: Double, longitude: Double) {
+    fun updateW3W(latitude: Double, longitude: Double) {
         viewModelScope.launch {
             getW3WUseCase(latitude, longitude)
                 .collect { response ->
@@ -70,15 +72,26 @@ class EditViewModel @Inject constructor(
                         when (current) {
                             is EditUiState.Success -> current.copy(
                                 photoInfo = current.photoInfo.copy(
-                                    latitude = latitude,
-                                    longitude = longitude,
-                                    w3w = response.words  // << 예를 들면 이렇게. (w3w 주소 필드 이름에 따라 수정)
+                                    w3w = response.words
                                 )
                             )
                             else -> current
                         }
                     }
                 }
+        }
+    }
+
+    fun updateLocation(latitude: Double, longitude: Double, w3w: String) {
+        _uiState.update { current ->
+            when (current) {
+                is EditUiState.Success -> current.copy(
+                    photoInfo = current.photoInfo.copy(
+                        latitude = latitude, longitude = longitude, w3w = w3w
+                    )
+                )
+                else -> current
+            }
         }
     }
 
