@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.GetW3WUseCase
+import com.example.domain.SavePhotoUseCase
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditViewModel @Inject constructor(
-    internal val getW3WUseCase: GetW3WUseCase
+    internal val getW3WUseCase: GetW3WUseCase,
+    private val savePhotoUseCase: SavePhotoUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<EditUiState>(EditUiState.Loading)
@@ -92,6 +94,23 @@ class EditViewModel @Inject constructor(
                 )
                 else -> current
             }
+        }
+    }
+
+    fun updatePhotoUri(uri: String) {
+        _uiState.update { current ->
+            if (current is EditUiState.Success) {
+                current.copy(photoInfo = current.photoInfo.copy(photoUri = uri))
+            } else current
+        }
+    }
+
+    fun savePhoto(onSaved: () -> Unit) {
+        val photoInfo = (uiState.value as? EditUiState.Success)?.photoInfo ?: return
+
+        viewModelScope.launch {
+            savePhotoUseCase(photoInfo)
+            onSaved() // 저장 후 화면 닫기 등 처리
         }
     }
 

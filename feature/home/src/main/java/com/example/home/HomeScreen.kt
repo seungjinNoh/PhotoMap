@@ -24,7 +24,7 @@ fun HomeScreen(
                 title = "한강",
                 tags = listOf("야경", "한강"),
                 description = "25년 봄 한강 야경",
-                photoUri = "이미지 경로",
+                photoUri = "",
                 w3w = "책상/의자/노트북",
                 latitude = 36.123,
                 longitude = 127.456

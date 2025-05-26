@@ -2,7 +2,12 @@
 
 package com.example.edit
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -10,22 +15,24 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,8 +45,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoInfo
 import com.example.navigation.Route
@@ -65,31 +74,45 @@ fun EditScreen(
         }
     }
 
-    if (uiState is EditUiState.Success) {
-        val photo = (uiState as EditUiState.Success).photoInfo
-        var tagInput by remember { mutableStateOf("") }
 
-        EditContent(
-            title = photo.title,
-            onTitleChange = viewModel::updateTitle,
-            tagInput = tagInput,
-            onTagInputChange = { tagInput = it },
-            onAddTag = {
-                if (tagInput.isNotBlank()) {
-                    viewModel.updateTags(photo.tags + tagInput.trim())
-                    tagInput = ""
-                }
-            },
-            tags = photo.tags,
-            w3w = photo.w3w,
-            onRemoveTag = { tag -> viewModel.updateTags(photo.tags - tag) },
-            description = photo.description,
-            onDescriptionChange = viewModel::updateDescription,
-            onSelectLocationClick = onSelectLocationClick
+    Column(modifier = Modifier.fillMaxSize()) {
+        EditTopBar(
+            isEditMode = photoInfo != null,
+            onBackClick = onBackClick,
+            onSaveClick= {
+                viewModel.savePhoto(onBackClick)
+            }
         )
-    } else {
-        // 로딩 중 혹은 상태 없음
-        Text("Loading...")
+
+        Spacer(modifier = Modifier.height(4.dp))
+
+        if (uiState is EditUiState.Success) {
+            val photo = (uiState as EditUiState.Success).photoInfo
+            var tagInput by remember { mutableStateOf("") }
+
+            EditContent(
+                title = photo.title,
+                onTitleChange = viewModel::updateTitle,
+                tagInput = tagInput,
+                onTagInputChange = { tagInput = it },
+                onAddTag = {
+                    if (tagInput.isNotBlank()) {
+                        viewModel.updateTags(photo.tags + tagInput.trim())
+                        tagInput = ""
+                    }
+                },
+                tags = photo.tags,
+                w3w = photo.w3w,
+                photoUri = photo.photoUri,
+                onRemoveTag = { tag -> viewModel.updateTags(photo.tags - tag) },
+                description = photo.description,
+                onDescriptionChange = viewModel::updateDescription,
+                onSelectLocationClick = onSelectLocationClick,
+                updatePhotoUri = viewModel::updatePhotoUri
+            )
+        } else {
+            Text("Loading...")
+        }
     }
 }
 
@@ -102,10 +125,12 @@ fun EditContent(
     onAddTag: () -> Unit,
     tags: List<String>,
     w3w: String? = null,
+    photoUri: String = "",
     onRemoveTag: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
-    onSelectLocationClick: (Route.SelectLocation) -> Unit
+    onSelectLocationClick: (Route.SelectLocation) -> Unit,
+    updatePhotoUri: (String) -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
         OutlinedTextField(
@@ -200,27 +225,107 @@ fun EditContent(
                     }
             )
         }
+        ImagePicker(
+            currentUri = photoUri,
+            onImageSelected = updatePhotoUri
+        )
+    }
+}
 
-        var currentLocationChecked by remember { mutableStateOf(false) }
+@Composable
+fun EditTopBar(
+    isEditMode: Boolean,
+    onBackClick: () -> Unit,
+    onSaveClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Close,
+            contentDescription = "뒤로가기",
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(start = 12.dp)
+                .size(24.dp)
+                .clickable(onClick = onBackClick)
+        )
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+        Text(
+            text = if (isEditMode) "편집하기" else "추가하기",
+            modifier = Modifier.align(Alignment.Center),
+            style = androidx.compose.material3.MaterialTheme.typography.titleMedium
+        )
+
+        Text(
+            text = "저장",
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 12.dp)
+                .clickable(onClick = onSaveClick),
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+fun ImagePicker(
+    currentUri: String?,
+    onImageSelected: (String) -> Unit
+) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let { onImageSelected(it.toString()) }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        // 상단 제목
+        Text(
+            text = "사진",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        // 이미지 또는 아이콘
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .offset(x = (-6).dp, y = (-6).dp)
-
+                .height(250.dp)
+                .clickable { launcher.launch("image/*") }
+                .background(Color.LightGray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
         ) {
-            Checkbox(
-                checked = currentLocationChecked,
-                onCheckedChange = { currentLocationChecked = it }
-            )
-
-            Text(
-                text = "현재 위치로 설정",
-                modifier = Modifier
-                    .clickable { currentLocationChecked = !currentLocationChecked }
-            )
+            if (!currentUri.isNullOrBlank()) {
+                Image(
+                    painter = rememberAsyncImagePainter(currentUri),
+                    contentDescription = "선택한 사진",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp)
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .size(80.dp)
+                        .border(2.dp, Color.Gray, shape = CircleShape)
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Face,
+                        contentDescription = "기본 카메라 아이콘",
+                        modifier = Modifier.size(40.dp),
+                        tint = Color.Gray
+                    )
+                }
+            }
         }
-
     }
 }
