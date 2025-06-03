@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.data.entity.PhotoEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PhotoDao {
@@ -13,5 +14,6 @@ interface PhotoDao {
     suspend fun insert(photoEntity: PhotoEntity)
 
     @Query("SELECT * FROM photos")
-    suspend fun getAllPhoto(): List<PhotoEntity>
+    fun getAllPhoto(): Flow<List<PhotoEntity>>
+
 }

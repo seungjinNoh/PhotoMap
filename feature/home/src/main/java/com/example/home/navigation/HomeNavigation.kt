@@ -1,5 +1,6 @@
 package com.example.home.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,12 +15,14 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 
 fun NavGraphBuilder.homeNavGraph(
     onEditClick: (PhotoInfo) -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    padding: PaddingValues
 ) {
     composable<MainTabRoute.Home> {
         HomeScreen(
             onEditClick = onEditClick,
-            onAddClick =onAddClick
+            onAddClick = onAddClick,
+            padding = padding
         )
     }
 }

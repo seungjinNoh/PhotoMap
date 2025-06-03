@@ -24,7 +24,8 @@ internal fun MainNavHost(
         splashNavGraph(navigateHome = { mainNavigator.navigateHome() })
         homeNavGraph(
             onEditClick = { mainNavigator.navigateEdit(it) },
-            onAddClick = { mainNavigator.navigateEditAddMode() }
+            onAddClick = { mainNavigator.navigateEditAddMode() },
+            padding = padding
         )
         mapNavGraph()
         editNavGraph(
