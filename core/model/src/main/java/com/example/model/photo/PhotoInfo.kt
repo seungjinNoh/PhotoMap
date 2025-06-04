@@ -4,6 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PhotoInfo(
+    val id: Long? = null,
     val title: String = "",
     val tags: List<String> = emptyList(),
     val description: String = "",

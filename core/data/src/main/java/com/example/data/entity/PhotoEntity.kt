@@ -16,6 +16,7 @@ data class PhotoEntity(
     val longitude: Double?
 ) {
     fun toDomain() = PhotoInfo(
+        id = id,
         title = title,
         tags = tags.split(","),
         description = description,
@@ -27,6 +28,7 @@ data class PhotoEntity(
 
     companion object {
         fun fromDomain(info: PhotoInfo) = PhotoEntity(
+            id = info.id ?: 0L,
             title = info.title,
             tags = info.tags.joinToString(","),
             description = info.description,
