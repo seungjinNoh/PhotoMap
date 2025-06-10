@@ -16,13 +16,15 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 fun NavGraphBuilder.homeNavGraph(
     onEditClick: (PhotoInfo) -> Unit,
     onAddClick: () -> Unit,
+    onMapClick: () -> Unit,
     padding: PaddingValues
 ) {
     composable<MainTabRoute.Home> {
         HomeScreen(
             onEditClick = onEditClick,
             onAddClick = onAddClick,
-            padding = padding
+            onMapClick= onMapClick,
+            padding = padding,
         )
     }
 }

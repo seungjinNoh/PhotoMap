@@ -25,9 +25,13 @@ internal fun MainNavHost(
         homeNavGraph(
             onEditClick = { mainNavigator.navigateEdit(it) },
             onAddClick = { mainNavigator.navigateEditAddMode() },
+            onMapClick = { mainNavigator.navigateMap() },
             padding = padding
         )
-        mapNavGraph()
+        mapNavGraph(
+            onEditClick = { mainNavigator.navigateEdit(it) },
+            padding = padding
+        )
         editNavGraph(
             onBackClick = mainNavigator::popBackStack,
             onSelectLocationClick = { mainNavigator.navigateSelectLocation(it.latitude, it.longitude) },

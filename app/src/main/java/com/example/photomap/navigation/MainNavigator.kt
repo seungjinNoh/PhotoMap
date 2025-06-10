@@ -44,7 +44,6 @@ internal class MainNavigator(
         when (tab) {
             // todo 각각의 navigate로 바꾸기
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.MAP -> navController.navigateMap(navOptions)
             MainTab.SEARCH -> navController.navigateHome(navOptions)
         }
     }
@@ -60,6 +59,10 @@ internal class MainNavigator(
 
     fun navigateEdit(photoInfo: PhotoInfo) {
         navController.navigateEdit(photoInfo)
+    }
+
+    fun navigateMap() {
+        navController.navigateMap()
     }
 
     fun navigateEditAddMode() {

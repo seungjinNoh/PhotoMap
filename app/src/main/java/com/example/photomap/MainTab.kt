@@ -2,7 +2,6 @@ package com.example.photomap
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -19,11 +18,6 @@ internal enum class MainTab(
         imageVector = Icons.Default.Home,
         contentDescription = "홈",
         route = MainTabRoute.Home
-    ),
-    MAP(
-        imageVector = Icons.Default.LocationOn,
-        contentDescription = "지도",
-        route = MainTabRoute.Map
     ),
     SEARCH(
         imageVector = Icons.Default.Search,
