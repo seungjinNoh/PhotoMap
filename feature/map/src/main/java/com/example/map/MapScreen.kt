@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +24,8 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.example.map.model.MapUiState
 import com.example.model.photo.PhotoInfo
+import com.example.utils.location.LocationProvider
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -48,15 +51,21 @@ fun MapScreen(
     val uiState by viewModel.uiState.collectAsState()
     val photoMarkerIcons by viewModel.markerIcon.collectAsState()
     val cameraPositionState = rememberCameraPositionState()
+    val context = LocalContext.current
+    val locationProvider = remember { LocationProvider(context) }
     val mapProperties = MapProperties(
         mapType = MapType.NORMAL
     )
-    val context = LocalContext.current
 
     LaunchedEffect(uiState) {
         if (uiState is MapUiState.Success) {
             val photos = (uiState as MapUiState.Success).photoList
             viewModel.requestPhotoMarker(photos)
+
+            val location = locationProvider.getCurrentLocation()
+            location?.let {
+                cameraPositionState.animate(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude, it.longitude), 15f))
+            }
         }
     }
 
@@ -103,7 +112,8 @@ fun MapScreen(
                     if (photo.latitude != null && photo.longitude != null) {
                         Marker(
                             state = MarkerState(position = LatLng(photo.latitude!!, photo.longitude!!)),
-                            icon = photoMarkerIcons.find { it.containsKey(photo.id!!) }?.get(photo.id)
+                            icon = photoMarkerIcons.find { it.containsKey(photo.id!!) }?.get(photo.id),
+                            zIndex = 999f
                         )
                     }
 

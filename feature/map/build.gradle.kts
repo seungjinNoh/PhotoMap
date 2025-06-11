@@ -21,4 +21,5 @@ dependencies {
     implementation(libs.google.maps.sdk)
     implementation(libs.coil.compose)
     implementation(projects.core.domain)
+    implementation(projects.core.utils)
 }
