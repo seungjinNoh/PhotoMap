@@ -45,7 +45,7 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun selectPhoto(photo: PhotoInfo) {
+    fun selectPhoto(photo: PhotoInfo?) {
         val currentState = _uiState.value
         if (currentState is MapUiState.Success) {
             _uiState.value = currentState.copy(selectedPhoto = photo)
