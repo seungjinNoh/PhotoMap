@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,8 +24,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -60,6 +65,7 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
@@ -81,8 +87,31 @@ fun MapScreen(
         mapType = MapType.NORMAL
     )
 
+    val photoList by viewModel.requestedPhotoMarker.collectAsState()
+
+    LaunchedEffect(photoList) {
+        val icons = mutableListOf<Map<Long, BitmapDescriptor>>()
+        photoList.forEach { photo ->
+            Log.d("photomap", "*** photo: ${photo.title} / ${photo.photoUri}")
+            val icon = createMarkerBitmapDescriptor(
+                context = context,
+                photoUri = photo.photoUri
+            )
+            icons.add(mapOf(photo.id!! to icon))
+        }
+        viewModel.setMarkerIcons(icons)
+    }
+
+    LaunchedEffect(Unit) {
+        Log.d("photomap", "*** refresh LaunchedEffect")
+        delay(5000)
+        viewModel.refreshPhotos()
+    }
+
     LaunchedEffect(uiState) {
+        Log.d("photomap", "*** uiState LaunchedEffect")
         if (uiState is MapUiState.Success) {
+            Log.d("photomap", "*** uiState LaunchedEffect Success")
             val photos = (uiState as MapUiState.Success).photoList
             viewModel.requestPhotoMarker(photos)
 
@@ -98,28 +127,11 @@ fun MapScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.requestedPhotoMarker
-            .onEach { photos ->
-                val icons = mutableListOf<Map<Long, BitmapDescriptor>>()
-                photos.map { photo ->
-                    val icon = createMarkerBitmapDescriptor(
-                        context = context,
-                        photoUri = photo.photoUri
-                    )
-                    icons.add(mapOf(photo.id!! to icon))
-                }
-                viewModel.setMarkerIcons(icons)
-            }
-            .launchIn(this)
-    }
-
     val selectedPhoto = (uiState as? MapUiState.Success)?.selectedPhoto
 
     LaunchedEffect(selectedPhoto) {
         selectedPhoto?.let {
             if (it.latitude != null && it.longitude != null) {
-                Log.d("photomap", "*** selected.photo 위경도: ${it.latitude}, ${it.longitude}")
                 cameraPositionState.animate(
                     CameraUpdateFactory.newLatLng(
                         LatLng(it.latitude!!, it.longitude!!)
@@ -172,7 +184,10 @@ fun MapScreen(
         if (uiState is MapUiState.Success) {
             val selected = (uiState as MapUiState.Success).selectedPhoto
             if (selected != null) {
-                PhotoBottomSheetScaffold(photo = selected)
+                PhotoBottomSheetScaffold(
+                    photo = selected,
+                    onEditClick = onEditClick
+                )
             }
         }
     }
@@ -182,7 +197,8 @@ fun MapScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoBottomSheetScaffold(
-    photo: PhotoInfo
+    photo: PhotoInfo,
+    onEditClick: (PhotoInfo) -> Unit
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
@@ -217,7 +233,21 @@ fun PhotoBottomSheetScaffold(
                     .background(color = Color.White)
                     .padding(horizontal = 9.dp, vertical = 4.dp)
             ) {
-                TitleAndTag(photo)
+//                TitleAndTag(photo)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    TitleAndTag(photo)
+                    IconButton(onClick = { onEditClick(photo) }) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
 
                 val isExpanded = scaffoldState.bottomSheetState.currentValue == SheetValue.Expanded
 

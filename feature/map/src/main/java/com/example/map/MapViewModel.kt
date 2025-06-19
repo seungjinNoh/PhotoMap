@@ -1,7 +1,5 @@
 package com.example.map
 
-import android.provider.ContactsContract.Contacts.Photo
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.GetAllPhotoUseCase
@@ -9,11 +7,8 @@ import com.example.map.model.MapUiState
 import com.example.model.photo.PhotoInfo
 import com.google.android.gms.maps.model.BitmapDescriptor
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,8 +23,8 @@ class MapViewModel @Inject constructor(
     private val _markerIcon = MutableStateFlow<List<Map<Long, BitmapDescriptor?>>>(emptyList())
     val markerIcon: StateFlow<List<Map<Long, BitmapDescriptor?>>> = _markerIcon
 
-    private val _requestedPhotoMarker = MutableSharedFlow<List<PhotoInfo>>()
-    val requestedPhotoMarker: SharedFlow<List<PhotoInfo>> = _requestedPhotoMarker.asSharedFlow()
+    private val _requestedPhotoMarker = MutableStateFlow<List<PhotoInfo>>(emptyList())
+    val requestedPhotoMarker: StateFlow<List<PhotoInfo>> = _requestedPhotoMarker
 
     init {
         viewModelScope.launch {
@@ -57,8 +52,17 @@ class MapViewModel @Inject constructor(
     }
 
     fun requestPhotoMarker(photos: List<PhotoInfo>) {
+        _requestedPhotoMarker.value = photos
+    }
+
+    fun refreshPhotos() {
         viewModelScope.launch {
-            _requestedPhotoMarker.emit(photos)
+            getAllPhotoUseCase().collect { photoList ->
+                _uiState.value = MapUiState.Success(
+                    photoList = photoList,
+                    selectedPhoto = null
+                )
+            }
         }
     }
 
