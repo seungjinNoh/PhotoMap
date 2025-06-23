@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface PhotoRepository {
     fun getAllPhotos(): Flow<List<PhotoInfo>>
     suspend fun insertPhoto(photo: PhotoEntity)
+    suspend fun deleteById(id: Long)
 }

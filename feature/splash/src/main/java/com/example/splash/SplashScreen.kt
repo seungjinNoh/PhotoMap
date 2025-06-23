@@ -54,7 +54,6 @@ fun SplashScreen(
     navigateHome: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
-    Log.d("photomap", "*** 현재 버전: ${Build.VERSION.SDK_INT}")
     val context = LocalContext.current
     val isFirstLaunch by viewModel.isFirstLaunch
 

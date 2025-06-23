@@ -20,4 +20,8 @@ class DefaultPhotoRepository @Inject constructor(
         dao.insert(photoEntity = photo)
     }
 
+    override suspend fun deleteById(id: Long) {
+        dao.deleteById(id)
+    }
+
 }

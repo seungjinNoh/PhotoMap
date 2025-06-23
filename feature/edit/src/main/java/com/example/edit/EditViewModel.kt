@@ -3,6 +3,7 @@ package com.example.edit
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.DeletePhotoUseCase
 import com.example.domain.GetW3WUseCase
 import com.example.domain.SavePhotoUseCase
 import com.example.edit.model.EditUiState
@@ -17,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class EditViewModel @Inject constructor(
     internal val getW3WUseCase: GetW3WUseCase,
-    private val savePhotoUseCase: SavePhotoUseCase
+    private val savePhotoUseCase: SavePhotoUseCase,
+    private val deletePhotoUseCase: DeletePhotoUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<EditUiState>(EditUiState.Loading)
@@ -112,6 +114,21 @@ class EditViewModel @Inject constructor(
             savePhotoUseCase(photoInfo)
             onSaved() // 저장 후 화면 닫기 등 처리
         }
+    }
+
+    fun deletePhoto(id: Long?, onDeleted: () -> Unit) {
+        if (id != null) {
+            viewModelScope.launch {
+                val current = uiState.value
+                if (current is EditUiState.Success) {
+                    // 실제 삭제 처리
+                    deletePhotoUseCase(id) // 실제 구현에 따라 변경
+//                    _uiState.value = EditUiState.Deleted
+                    onDeleted()
+                }
+            }
+        }
+
     }
 
 }

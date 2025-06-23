@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,7 +46,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
@@ -77,11 +77,10 @@ fun EditScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         EditTopBar(
-            isEditMode = photoInfo != null,
+            photoInfo,
             onBackClick = onBackClick,
-            onSaveClick= {
-                viewModel.savePhoto(onBackClick)
-            }
+            onSaveClick= { viewModel.savePhoto(onBackClick) },
+            onDeleteClick = { viewModel.deletePhoto(photoInfo?.id, onBackClick) }
         )
 
         Spacer(modifier = Modifier.height(4.dp))
@@ -234,10 +233,41 @@ fun EditContent(
 
 @Composable
 fun EditTopBar(
-    isEditMode: Boolean,
+    photoInfo: PhotoInfo?,
     onBackClick: () -> Unit,
-    onSaveClick: () -> Unit
+    onSaveClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("사진 삭제") },
+            text = { Text("정말로 이 사진을 삭제하시겠습니까?") },
+            confirmButton = {
+                Text(
+                    text = "삭제",
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier
+                        .clickable {
+                            showDeleteDialog = false
+                            onDeleteClick()
+                        }
+                        .padding(16.dp)
+                )
+            },
+            dismissButton = {
+                Text(
+                    text = "취소",
+                    modifier = Modifier
+                        .clickable { showDeleteDialog = false }
+                        .padding(16.dp)
+                )
+            }
+        )
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -254,19 +284,30 @@ fun EditTopBar(
         )
 
         Text(
-            text = if (isEditMode) "편집하기" else "추가하기",
+            text = if (photoInfo != null) "편집하기" else "추가하기",
             modifier = Modifier.align(Alignment.Center),
             style = androidx.compose.material3.MaterialTheme.typography.titleMedium
         )
 
-        Text(
-            text = "저장",
-            modifier = Modifier
-                .align(Alignment.CenterEnd)
-                .padding(end = 12.dp)
-                .clickable(onClick = onSaveClick),
-            color = MaterialTheme.colorScheme.primary
-        )
+        Row(modifier = Modifier.align(Alignment.CenterEnd)) {
+            if (photoInfo != null) {
+                Text(
+                    text = "삭제",
+                    modifier = Modifier
+                        .padding(end = 20.dp)
+                        .clickable{ showDeleteDialog = true },
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            Text(
+                text = "저장",
+                modifier = Modifier
+                    .padding(end = 12.dp)
+                    .clickable(onClick = onSaveClick),
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     }
 }
 
