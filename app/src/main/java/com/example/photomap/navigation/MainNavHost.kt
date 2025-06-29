@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import com.example.edit.navigation.editNavGraph
 import com.example.home.navigation.homeNavGraph
 import com.example.map.navigation.mapNavGraph
+import com.example.search.navigation.searchNavGraph
 import com.example.splash.navigation.splashNavGraph
 
 @Composable
@@ -36,6 +37,10 @@ internal fun MainNavHost(
             onBackClick = mainNavigator::popBackStack,
             onSelectLocationClick = { mainNavigator.navigateSelectLocation(it.latitude, it.longitude) },
             navController = mainNavigator.navController
+        )
+        searchNavGraph(
+            onEditClick = { mainNavigator.navigateEdit(it) },
+            padding = padding
         )
     }
 }

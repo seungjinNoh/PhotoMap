@@ -16,6 +16,7 @@ import com.example.map.navigation.navigateMap
 import com.example.model.photo.PhotoInfo
 import com.example.navigation.Route
 import com.example.photomap.MainTab
+import com.example.search.navigation.navigateSearch
 
 internal class MainNavigator(
     val navController: NavHostController
@@ -44,10 +45,12 @@ internal class MainNavigator(
         when (tab) {
             // todo 각각의 navigate로 바꾸기
             MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.SEARCH -> navController.navigateHome(navOptions)
+            MainTab.SEARCH -> navController.navigateSearch(navOptions)
         }
     }
 
+
+    // Splash -> Home
     fun navigateHome() {
         val navOption = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {

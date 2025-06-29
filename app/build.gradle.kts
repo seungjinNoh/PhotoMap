@@ -30,6 +30,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.map)
     implementation(projects.feature.edit)
+    implementation(projects.feature.search)
     implementation(projects.core.navigation)
     implementation(projects.core.model)
 
