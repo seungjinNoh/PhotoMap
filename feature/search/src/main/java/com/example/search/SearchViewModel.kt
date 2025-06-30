@@ -19,15 +19,21 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Loading)
     val uiState: StateFlow<SearchUiState> = _uiState
 
-    private var allPhotos: List<PhotoInfo> = emptyList()
+    private val allPhotos = mutableListOf<PhotoInfo>()
 
     init {
         viewModelScope.launch {
             getAllPhotoUseCase().collect { photos ->
-                allPhotos = photos
+//                allPhotos = photos
+//                _uiState.value = SearchUiState.Success(
+//                    query = "",
+//                    filteredPhotos = photos
+//                )
+                allPhotos.clear()
+                allPhotos.addAll(photos)
                 _uiState.value = SearchUiState.Success(
-                    query = "",
-                    filteredPhotos = photos
+                    query = _uiState.value.queryOrEmpty(),
+                    filteredPhotos = filterPhotos(_uiState.value.queryOrEmpty(), photos)
                 )
             }
         }
@@ -44,5 +50,16 @@ class SearchViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    private fun filterPhotos(query: String, photos: List<PhotoInfo>): List<PhotoInfo> {
+        return photos.filter {
+            it.title.contains(query, ignoreCase = true) ||
+                    it.tags.any { tag -> tag.contains(query, ignoreCase = true) }
+        }
+    }
+
+    private fun SearchUiState.queryOrEmpty(): String {
+        return if (this is SearchUiState.Success) this.query else ""
     }
 }
