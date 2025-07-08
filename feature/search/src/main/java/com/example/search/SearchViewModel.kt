@@ -2,7 +2,7 @@ package com.example.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.GetAllPhotoUseCase
+import com.example.domain.usecase.GetAllPhotoUseCase
 import com.example.model.photo.PhotoInfo
 import com.example.search.model.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel

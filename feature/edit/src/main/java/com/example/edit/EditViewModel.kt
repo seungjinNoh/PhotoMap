@@ -1,11 +1,10 @@
 package com.example.edit
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.DeletePhotoUseCase
-import com.example.domain.GetW3WUseCase
-import com.example.domain.SavePhotoUseCase
+import com.example.domain.usecase.DeletePhotoUseCase
+import com.example.domain.usecase.GetW3WUseCase
+import com.example.domain.usecase.SavePhotoUseCase
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoInfo
 import dagger.hilt.android.lifecycle.HiltViewModel

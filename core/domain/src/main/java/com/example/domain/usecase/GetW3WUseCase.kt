@@ -1,6 +1,6 @@
-package com.example.domain
+package com.example.domain.usecase
 
-import com.example.data.repository.W3WRepository
+import com.example.domain.repository.W3WRepository
 import javax.inject.Inject
 
 class GetW3WUseCase @Inject constructor(

@@ -1,5 +1,6 @@
-package com.example.data.repository
+package com.example.data.impl
 
+import com.example.domain.repository.W3WRepository
 import com.example.model.w3w.W3WResponse
 import com.example.network.repository.W3WDataSource
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class DefaultW3WRepository @Inject constructor(
+class W3WRepositoryImpl @Inject constructor(
     private val w3WDataSource: W3WDataSource
 ) : W3WRepository {
 

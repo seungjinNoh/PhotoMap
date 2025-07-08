@@ -1,6 +1,6 @@
-package com.example.domain
+package com.example.domain.usecase
 
-import com.example.data.repository.PhotoRepository
+import com.example.domain.repository.PhotoRepository
 import javax.inject.Inject
 
 class DeletePhotoUseCase @Inject constructor(

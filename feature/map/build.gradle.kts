@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.maps.compose)
     implementation(libs.google.maps.sdk)
     implementation(libs.coil.compose)
-    implementation(projects.core.domain)
+//    implementation(projects.core.domain)
     implementation(projects.core.utils)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)

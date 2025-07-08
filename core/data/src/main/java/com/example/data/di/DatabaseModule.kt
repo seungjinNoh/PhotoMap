@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.data.database.PhotoDao
 import com.example.data.database.PhotoDatabase
-import com.example.data.repository.DefaultPhotoRepository
-import com.example.data.repository.PhotoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,8 +22,5 @@ object DatabaseModule {
 
     @Provides
     fun providePhotoDao(db: PhotoDatabase): PhotoDao = db.photoDao()
-
-    @Provides
-    fun providePhotoRepository(dao: PhotoDao): PhotoRepository = DefaultPhotoRepository(dao = dao)
 
 }

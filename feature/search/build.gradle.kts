@@ -17,6 +17,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation(projects.core.domain)
+//    implementation(projects.core.domain)
     implementation(libs.coil.compose)
 }

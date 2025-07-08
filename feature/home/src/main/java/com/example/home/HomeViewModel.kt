@@ -2,7 +2,7 @@ package com.example.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.GetAllPhotoUseCase
+import com.example.domain.usecase.GetAllPhotoUseCase
 import com.example.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted

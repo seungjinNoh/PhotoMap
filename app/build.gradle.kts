@@ -11,6 +11,7 @@ android {
         manifestPlaceholders["google_maps_key"] =
             System.getenv("GOOGLE_MAPS_API_KEY") ?: project.findProperty("GOOGLE_MAPS_API_KEY")
                     ?: ""
+        println(manifestPlaceholders["google_maps_key"])
     }
 }
 
@@ -33,5 +34,7 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.core.navigation)
     implementation(projects.core.model)
+    implementation(projects.core.domain)
+    implementation(projects.core.data)
 
 }

@@ -2,7 +2,7 @@ package com.example.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.GetAllPhotoUseCase
+import com.example.domain.usecase.GetAllPhotoUseCase
 import com.example.map.model.MapUiState
 import com.example.model.photo.PhotoInfo
 import com.google.android.gms.maps.model.BitmapDescriptor
