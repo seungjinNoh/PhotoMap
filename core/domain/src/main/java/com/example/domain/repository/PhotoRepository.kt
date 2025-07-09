@@ -1,10 +1,10 @@
 package com.example.domain.repository
 
-import com.example.model.photo.PhotoInfo
+import com.example.domain.model.Photo
 import kotlinx.coroutines.flow.Flow
 
 interface PhotoRepository {
-    fun getAllPhotos(): Flow<List<PhotoInfo>>
-    suspend fun insertPhoto(photo: PhotoInfo)
+    fun getAllPhotos(): Flow<List<Photo>>
+    suspend fun insertPhoto(photo: Photo)
     suspend fun deleteById(id: Long)
 }

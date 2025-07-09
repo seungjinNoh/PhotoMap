@@ -31,12 +31,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.search.model.SearchUiState
 
 @Composable
 fun SearchScreen(
-    onEditClick: (PhotoInfo) -> Unit,
+    onEditClick: (PhotoUiModel) -> Unit,
     padding: PaddingValues,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -104,7 +104,7 @@ fun SearchTopBar(
 
 @Composable
 fun SearchPhotoCard(
-    photo: PhotoInfo,
+    photo: PhotoUiModel,
     onClick: () -> Unit
 ) {
     Row(

@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.navigation.MainTabRoute
 import com.example.search.SearchScreen
 
@@ -14,7 +14,7 @@ fun NavController.navigateSearch(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.searchNavGraph(
-    onEditClick: (PhotoInfo) -> Unit,
+    onEditClick: (PhotoUiModel) -> Unit,
     padding: PaddingValues
 ) {
     composable<MainTabRoute.Search> {

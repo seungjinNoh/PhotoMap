@@ -14,18 +14,18 @@ import androidx.navigation.toRoute
 import com.example.edit.EditScreen
 import com.example.edit.EditViewModel
 import com.example.edit.SelectLocationScreen
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.navigation.Route
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-fun NavController.navigateEdit(photoInfo: PhotoInfo) {
-    val photoInfoJson = Uri.encode(Json.encodeToString(photoInfo))
-    navigate("edit_screen?photoInfo=$photoInfoJson")
+fun NavController.navigateEdit(photoUiModel: PhotoUiModel) {
+    val photoUiModelJson = Uri.encode(Json.encodeToString(photoUiModel))
+    navigate("edit_screen?photoUiModel=$photoUiModelJson")
 }
 
 fun NavController.navigateEdit() {
-    navigate("edit_screen") // photoInfo 없이 → 추가 모드
+    navigate("edit_screen")
 }
 
 fun NavController.navigateSelectLocation(latitude: Double, longitude: Double) {
@@ -41,12 +41,12 @@ fun NavGraphBuilder.editNavGraph(
 
     navigation(
         route = "edit_root",
-        startDestination = "edit_screen?photoInfo={photoInfo}"
+        startDestination = "edit_screen?photoUiModel={photoUiModel}"
     ) {
         composable(
-            route = "edit_screen?photoInfo={photoInfo}",
+            route = "edit_screen?photoUiModel={photoUiModel}",
             arguments = listOf(
-                navArgument("photoInfo") {
+                navArgument("photoUiModel") {
                     type = NavType.StringType
                     nullable = true
                     defaultValue = null
@@ -55,11 +55,11 @@ fun NavGraphBuilder.editNavGraph(
         ) { navBackStackEntry ->
             val parentEntry = remember { navController.getBackStackEntry("edit_root") }
             val viewModel: EditViewModel = hiltViewModel(parentEntry)
-            val photoInfoJson = navBackStackEntry.arguments?.getString("photoInfo")
-            val photoInfo = photoInfoJson?.let { Json.decodeFromString<PhotoInfo>(it) }
+            val photoUiModelJson = navBackStackEntry.arguments?.getString("photoUiModel")
+            val photoUiModel = photoUiModelJson?.let { Json.decodeFromString<PhotoUiModel>(it) }
 
             EditScreen(
-                photoInfo = photoInfo,
+                photoUiModel = photoUiModel,
                 onBackClick = onBackClick,
                 onSelectLocationClick =  onSelectLocationClick,
                 viewModel = viewModel

@@ -2,7 +2,7 @@ package com.example.edit.model
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 
 @Stable
 sealed interface EditUiState {
@@ -15,7 +15,7 @@ sealed interface EditUiState {
 
     @Immutable
     data class Success(
-        val photoInfo: PhotoInfo
+        val photoUiModel: PhotoUiModel
     ) : EditUiState
 
 }

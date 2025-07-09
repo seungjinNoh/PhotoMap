@@ -50,12 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.edit.model.EditUiState
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.navigation.Route
 
 @Composable
 fun EditScreen(
-    photoInfo: PhotoInfo?,
+    photoUiModel: PhotoUiModel?,
     onBackClick: () -> Unit,
     onSelectLocationClick: (Route.SelectLocation) -> Unit,
     viewModel: EditViewModel = hiltViewModel()
@@ -67,8 +67,8 @@ fun EditScreen(
     LaunchedEffect(Unit) {
         when (uiState) {
             is EditUiState.Loading -> {
-                if (photoInfo == null) viewModel.createNewPhoto()
-                else viewModel.editExistingPhoto(photoInfo)
+                if (photoUiModel == null) viewModel.createNewPhoto()
+                else viewModel.editExistingPhoto(photoUiModel)
             }
             else -> Unit
         }
@@ -77,16 +77,16 @@ fun EditScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         EditTopBar(
-            photoInfo,
+            photoUiModel,
             onBackClick = onBackClick,
             onSaveClick= { viewModel.savePhoto(onBackClick) },
-            onDeleteClick = { viewModel.deletePhoto(photoInfo?.id, onBackClick) }
+            onDeleteClick = { viewModel.deletePhoto(photoUiModel?.id, onBackClick) }
         )
 
         Spacer(modifier = Modifier.height(4.dp))
 
         if (uiState is EditUiState.Success) {
-            val photo = (uiState as EditUiState.Success).photoInfo
+            val photo = (uiState as EditUiState.Success).photoUiModel
             var tagInput by remember { mutableStateOf("") }
 
             EditContent(
@@ -233,7 +233,7 @@ fun EditContent(
 
 @Composable
 fun EditTopBar(
-    photoInfo: PhotoInfo?,
+    photoUiModel: PhotoUiModel?,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit
@@ -284,13 +284,13 @@ fun EditTopBar(
         )
 
         Text(
-            text = if (photoInfo != null) "편집하기" else "추가하기",
+            text = if (photoUiModel != null) "편집하기" else "추가하기",
             modifier = Modifier.align(Alignment.Center),
             style = androidx.compose.material3.MaterialTheme.typography.titleMedium
         )
 
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            if (photoInfo != null) {
+            if (photoUiModel != null) {
                 Text(
                     text = "삭제",
                     modifier = Modifier

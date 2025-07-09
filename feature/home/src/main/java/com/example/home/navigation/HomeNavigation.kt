@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.example.home.HomeScreen
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.navigation.MainTabRoute
 
 fun NavController.navigateHome(navOptions: NavOptions) {
@@ -14,7 +14,7 @@ fun NavController.navigateHome(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.homeNavGraph(
-    onEditClick: (PhotoInfo) -> Unit,
+    onEditClick: (PhotoUiModel) -> Unit,
     onAddClick: () -> Unit,
     onMapClick: () -> Unit,
     padding: PaddingValues

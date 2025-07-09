@@ -4,7 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetAllPhotoUseCase
 import com.example.map.model.MapUiState
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
+import com.example.model.photo.toUiModel
 import com.google.android.gms.maps.model.BitmapDescriptor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +24,8 @@ class MapViewModel @Inject constructor(
     private val _markerIcon = MutableStateFlow<List<Map<Long, BitmapDescriptor?>>>(emptyList())
     val markerIcon: StateFlow<List<Map<Long, BitmapDescriptor?>>> = _markerIcon
 
-    private val _requestedPhotoMarker = MutableStateFlow<List<PhotoInfo>>(emptyList())
-    val requestedPhotoMarker: StateFlow<List<PhotoInfo>> = _requestedPhotoMarker
+    private val _requestedPhotoMarker = MutableStateFlow<List<PhotoUiModel>>(emptyList())
+    val requestedPhotoMarker: StateFlow<List<PhotoUiModel>> = _requestedPhotoMarker
 
     init {
         viewModelScope.launch {
@@ -32,7 +33,7 @@ class MapViewModel @Inject constructor(
                 .collect { photoList ->
                     if (photoList.isNotEmpty()) {
                         _uiState.value = MapUiState.Success(
-                            photoList = photoList,
+                            photoUiModelList = photoList.map { it.toUiModel() },
                             selectedPhoto = null
                         )
                     }
@@ -40,10 +41,10 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun selectPhoto(photo: PhotoInfo?) {
+    fun selectPhoto(photoUiModel: PhotoUiModel?) {
         val currentState = _uiState.value
         if (currentState is MapUiState.Success) {
-            _uiState.value = currentState.copy(selectedPhoto = photo)
+            _uiState.value = currentState.copy(selectedPhoto = photoUiModel)
         }
     }
 
@@ -51,7 +52,7 @@ class MapViewModel @Inject constructor(
         _markerIcon.value = icons
     }
 
-    fun requestPhotoMarker(photos: List<PhotoInfo>) {
+    fun requestPhotoMarker(photos: List<PhotoUiModel>) {
         _requestedPhotoMarker.value = photos
     }
 
@@ -59,7 +60,7 @@ class MapViewModel @Inject constructor(
         viewModelScope.launch {
             getAllPhotoUseCase().collect { photoList ->
                 _uiState.value = MapUiState.Success(
-                    photoList = photoList,
+                    photoUiModelList = photoList.map { it.toUiModel() },
                     selectedPhoto = null
                 )
             }

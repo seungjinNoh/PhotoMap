@@ -50,7 +50,7 @@ internal fun SelectLocationScreen(
 
     // 1. 초기 카메라 이동 처리
     LaunchedEffect(uiState) {
-        val photo = (uiState as? EditUiState.Success)?.photoInfo
+        val photo = (uiState as? EditUiState.Success)?.photoUiModel
         val targetLatLng = when {
             photo?.latitude != null && photo.longitude != null -> {
                 val latLng = LatLng(photo.latitude!!, photo.longitude!!)

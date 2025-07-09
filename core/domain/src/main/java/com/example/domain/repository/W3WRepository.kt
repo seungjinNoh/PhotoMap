@@ -1,8 +1,8 @@
 package com.example.domain.repository
 
-import com.example.model.w3w.W3WResponse
+import com.example.domain.model.W3W
 import kotlinx.coroutines.flow.Flow
 
 interface W3WRepository {
-    fun get3WordAddress(latitude: Double, longitude: Double) : Flow<W3WResponse>
+    fun get3WordAddress(latitude: Double, longitude: Double) : Flow<W3W>
 }

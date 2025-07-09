@@ -6,7 +6,8 @@ import com.example.domain.usecase.DeletePhotoUseCase
 import com.example.domain.usecase.GetW3WUseCase
 import com.example.domain.usecase.SavePhotoUseCase
 import com.example.edit.model.EditUiState
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
+import com.example.model.photo.toDomain
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,19 +27,19 @@ class EditViewModel @Inject constructor(
 
     fun createNewPhoto() {
         _uiState.value = EditUiState.Success(
-            PhotoInfo()
+            PhotoUiModel()
         )
     }
 
-    fun editExistingPhoto(photoInfo: PhotoInfo) {
-        _uiState.value = EditUiState.Success(photoInfo)
+    fun editExistingPhoto(photoUiModel: PhotoUiModel) {
+        _uiState.value = EditUiState.Success(photoUiModel)
     }
 
     fun updateTitle(title: String) {
         _uiState.update { current ->
             when (current) {
                 is EditUiState.Success -> current.copy(
-                    photoInfo = current.photoInfo.copy(title = title)
+                    photoUiModel = current.photoUiModel.copy(title = title)
                 )
                 else -> current
             }
@@ -49,7 +50,7 @@ class EditViewModel @Inject constructor(
         _uiState.update { current ->
             when (current) {
                 is EditUiState.Success -> current.copy(
-                    photoInfo = current.photoInfo.copy(description = description)
+                    photoUiModel = current.photoUiModel.copy(description = description)
                 )
                 else -> current
             }
@@ -60,7 +61,7 @@ class EditViewModel @Inject constructor(
         _uiState.update { current ->
             when (current) {
                 is EditUiState.Success -> current.copy(
-                    photoInfo = current.photoInfo.copy(tags = tags)
+                    photoUiModel = current.photoUiModel.copy(tags = tags)
                 )
                 else -> current
             }
@@ -74,7 +75,7 @@ class EditViewModel @Inject constructor(
                     _uiState.update { current ->
                         when (current) {
                             is EditUiState.Success -> current.copy(
-                                photoInfo = current.photoInfo.copy(
+                                photoUiModel = current.photoUiModel.copy(
                                     w3w = response.words
                                 )
                             )
@@ -89,7 +90,7 @@ class EditViewModel @Inject constructor(
         _uiState.update { current ->
             when (current) {
                 is EditUiState.Success -> current.copy(
-                    photoInfo = current.photoInfo.copy(
+                    photoUiModel = current.photoUiModel.copy(
                         latitude = latitude, longitude = longitude, w3w = w3w
                     )
                 )
@@ -101,16 +102,16 @@ class EditViewModel @Inject constructor(
     fun updatePhotoUri(uri: String) {
         _uiState.update { current ->
             if (current is EditUiState.Success) {
-                current.copy(photoInfo = current.photoInfo.copy(photoUri = uri))
+                current.copy(photoUiModel = current.photoUiModel.copy(photoUri = uri))
             } else current
         }
     }
 
     fun savePhoto(onSaved: () -> Unit) {
-        val photoInfo = (uiState.value as? EditUiState.Success)?.photoInfo ?: return
+        val photoUiModel = (uiState.value as? EditUiState.Success)?.photoUiModel ?: return
 
         viewModelScope.launch {
-            savePhotoUseCase(photoInfo)
+            savePhotoUseCase(photoUiModel.toDomain())
             onSaved() // 저장 후 화면 닫기 등 처리
         }
     }

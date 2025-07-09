@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,11 +35,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.home.model.HomeUiState
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 
 @Composable
 fun HomeScreen(
-    onEditClick: (PhotoInfo) -> Unit,
+    onEditClick: (PhotoUiModel) -> Unit,
     onAddClick: () -> Unit,
     onMapClick: () -> Unit,
     padding: PaddingValues = PaddingValues(),
@@ -85,7 +84,7 @@ fun HomeScreen(
 }
 
 @Composable
-fun PhotoCard(photo: PhotoInfo, onClick: () -> Unit) {
+fun PhotoCard(photo: PhotoUiModel, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()

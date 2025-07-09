@@ -3,7 +3,8 @@ package com.example.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.GetAllPhotoUseCase
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
+import com.example.model.photo.toUiModelList
 import com.example.search.model.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,21 +20,16 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Loading)
     val uiState: StateFlow<SearchUiState> = _uiState
 
-    private val allPhotos = mutableListOf<PhotoInfo>()
+    private val allPhotos = mutableListOf<PhotoUiModel>()
 
     init {
         viewModelScope.launch {
-            getAllPhotoUseCase().collect { photos ->
-//                allPhotos = photos
-//                _uiState.value = SearchUiState.Success(
-//                    query = "",
-//                    filteredPhotos = photos
-//                )
+            getAllPhotoUseCase.invoke().collect { photos ->
                 allPhotos.clear()
-                allPhotos.addAll(photos)
+                allPhotos.addAll(photos.toUiModelList())
                 _uiState.value = SearchUiState.Success(
                     query = _uiState.value.queryOrEmpty(),
-                    filteredPhotos = filterPhotos(_uiState.value.queryOrEmpty(), photos)
+                    filteredPhotos = filterPhotos(_uiState.value.queryOrEmpty(), photos.toUiModelList())
                 )
             }
         }
@@ -52,7 +48,7 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    private fun filterPhotos(query: String, photos: List<PhotoInfo>): List<PhotoInfo> {
+    private fun filterPhotos(query: String, photos: List<PhotoUiModel>): List<PhotoUiModel> {
         return photos.filter {
             it.title.contains(query, ignoreCase = true) ||
                     it.tags.any { tag -> tag.contains(query, ignoreCase = true) }

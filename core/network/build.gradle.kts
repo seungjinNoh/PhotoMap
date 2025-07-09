@@ -31,4 +31,5 @@ dependencies {
 
     implementation(libs.w3w)
     implementation(project(":core:model"))
+    implementation(project(":core:domain"))
 }

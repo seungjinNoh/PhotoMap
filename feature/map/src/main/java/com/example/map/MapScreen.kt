@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -51,7 +50,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 import com.example.map.model.MapUiState
-import com.example.model.photo.PhotoInfo
+import com.example.model.photo.PhotoUiModel
 import com.example.utils.location.LocationProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.BitmapDescriptor
@@ -66,13 +65,11 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 
 @Composable
 fun MapScreen(
-    onEditClick: (PhotoInfo) -> Unit,
+    onEditClick: (PhotoUiModel) -> Unit,
     padding: PaddingValues,
     viewModel: MapViewModel = hiltViewModel()
 ) {
@@ -92,7 +89,6 @@ fun MapScreen(
     LaunchedEffect(photoList) {
         val icons = mutableListOf<Map<Long, BitmapDescriptor>>()
         photoList.forEach { photo ->
-            Log.d("photomap", "*** photo: ${photo.title} / ${photo.photoUri}")
             val icon = createMarkerBitmapDescriptor(
                 context = context,
                 photoUri = photo.photoUri
@@ -103,16 +99,13 @@ fun MapScreen(
     }
 
     LaunchedEffect(Unit) {
-        Log.d("photomap", "*** refresh LaunchedEffect")
         delay(5000)
         viewModel.refreshPhotos()
     }
 
     LaunchedEffect(uiState) {
-        Log.d("photomap", "*** uiState LaunchedEffect")
         if (uiState is MapUiState.Success) {
-            Log.d("photomap", "*** uiState LaunchedEffect Success")
-            val photos = (uiState as MapUiState.Success).photoList
+            val photos = (uiState as MapUiState.Success).photoUiModelList
             viewModel.requestPhotoMarker(photos)
 
 
@@ -161,7 +154,7 @@ fun MapScreen(
             }
         ) {
             if (uiState is MapUiState.Success) {
-                val photos = (uiState as MapUiState.Success).photoList
+                val photos = (uiState as MapUiState.Success).photoUiModelList
                 photos.forEach { photo ->
                     if (photo.latitude != null && photo.longitude != null) {
                         Marker(
@@ -197,8 +190,8 @@ fun MapScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PhotoBottomSheetScaffold(
-    photo: PhotoInfo,
-    onEditClick: (PhotoInfo) -> Unit
+    photo: PhotoUiModel,
+    onEditClick: (PhotoUiModel) -> Unit
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
@@ -268,7 +261,7 @@ fun PhotoBottomSheetScaffold(
 
 @Composable
 fun TitleAndTag(
-    photo: PhotoInfo
+    photo: PhotoUiModel
 ) {
     Column(modifier = Modifier.padding(8.dp)) {
         Text(
@@ -301,7 +294,7 @@ fun TitleAndTag(
 
 @Composable
 fun AddressAndW3W(
-    photo: PhotoInfo
+    photo: PhotoUiModel
 ) {
     Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)) {
         Text(

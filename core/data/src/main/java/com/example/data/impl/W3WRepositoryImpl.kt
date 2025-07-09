@@ -1,7 +1,8 @@
 package com.example.data.impl
 
+import com.example.domain.model.W3W
 import com.example.domain.repository.W3WRepository
-import com.example.model.w3w.W3WResponse
+import com.example.model.w3w.toDomain
 import com.example.network.repository.W3WDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,12 +15,11 @@ class W3WRepositoryImpl @Inject constructor(
     private val w3WDataSource: W3WDataSource
 ) : W3WRepository {
 
-    override fun get3WordAddress(latitude: Double, longitude: Double): Flow<W3WResponse> = flow {
-        val response = w3WDataSource.get3WordAddress(latitude, longitude)
+    override fun get3WordAddress(latitude: Double, longitude: Double): Flow<W3W> = flow {
+        val response = w3WDataSource.get3WordAddress(latitude, longitude).toDomain()
         emit(response)
     }.catch { e ->
-        // 필요한 에러 처리 가능
         throw e
-    }.flowOn(Dispatchers.IO) // 네트워크는 IO에서 처리
+    }.flowOn(Dispatchers.IO)
 
 }

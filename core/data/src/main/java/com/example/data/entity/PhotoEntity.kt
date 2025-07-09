@@ -2,7 +2,7 @@ package com.example.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.model.photo.PhotoInfo
+import com.example.domain.model.Photo
 
 @Entity(tableName = "photos")
 data class PhotoEntity(
@@ -15,7 +15,7 @@ data class PhotoEntity(
     val latitude: Double?,
     val longitude: Double?
 ) {
-    fun toDomain() = PhotoInfo(
+    fun toDomain() = Photo(
         id = id,
         title = title,
         tags = tags.split(","),
@@ -27,8 +27,8 @@ data class PhotoEntity(
     )
 
     companion object {
-        fun fromDomain(info: PhotoInfo) = PhotoEntity(
-            id = info.id ?: 0L,
+        fun fromDomain(info: Photo) = PhotoEntity(
+            id = info.id,
             title = info.title,
             tags = info.tags.joinToString(","),
             description = info.description,
