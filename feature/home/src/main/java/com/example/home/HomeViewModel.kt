@@ -19,7 +19,12 @@ class HomeViewModel @Inject constructor(
 
     val uiState: StateFlow<HomeUiState> = getAllPhotoUseCase()
         .map { photoList ->
-            HomeUiState.Success(photoList.toUiModelList())
+            val uiModels = photoList.toUiModelList()
+            if (uiModels.isEmpty()) {
+                HomeUiState.Empty
+            } else {
+                HomeUiState.Success(uiModels)
+            }
         }
         .stateIn(
             viewModelScope,
