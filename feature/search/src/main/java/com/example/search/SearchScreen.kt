@@ -36,7 +36,7 @@ import com.example.search.model.SearchUiState
 
 @Composable
 fun SearchScreen(
-    onEditClick: (PhotoUiModel) -> Unit,
+    onEditClick: (Long) -> Unit,
     padding: PaddingValues,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -75,7 +75,7 @@ fun SearchScreen(
                 if (state.query.isNotBlank()) {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(state.filteredPhotos) { photo ->
-                            SearchPhotoCard(photo = photo, onClick = { onEditClick(photo) })
+                            SearchPhotoCard(photo = photo, onClick = { photo.id?.let { onEditClick(it) } })
                         }
                     }
                 }

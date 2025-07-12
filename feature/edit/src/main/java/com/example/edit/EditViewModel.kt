@@ -1,13 +1,16 @@
 package com.example.edit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.usecase.DeletePhotoUseCase
+import com.example.domain.usecase.GetPhotoByIdUseCase
 import com.example.domain.usecase.GetW3WUseCase
 import com.example.domain.usecase.SavePhotoUseCase
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoUiModel
 import com.example.model.photo.toDomain
+import com.example.model.photo.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EditViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    getPhotoByIdUseCase: GetPhotoByIdUseCase,
     internal val getW3WUseCase: GetW3WUseCase,
     private val savePhotoUseCase: SavePhotoUseCase,
     private val deletePhotoUseCase: DeletePhotoUseCase
@@ -25,14 +30,24 @@ class EditViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<EditUiState>(EditUiState.Loading)
     val uiState: StateFlow<EditUiState> = _uiState
 
-    fun createNewPhoto() {
-        _uiState.value = EditUiState.Success(
-            PhotoUiModel()
-        )
-    }
+    init {
+        val photoId: Long = savedStateHandle["photoId"] ?: -1L
 
-    fun editExistingPhoto(photoUiModel: PhotoUiModel) {
-        _uiState.value = EditUiState.Success(photoUiModel)
+        if (photoId == -1L) {
+            _uiState.value = EditUiState.Success(PhotoUiModel())
+        } else {
+            viewModelScope.launch {
+                try {
+                    val photo = getPhotoByIdUseCase(photoId)
+                    if (photo == null) _uiState.value = EditUiState.Error("예기치 못한 오류가 발생했습니다.")
+                    else _uiState.value = EditUiState.Success(photo.toUiModel())
+                } catch (e: NoSuchElementException) {
+                    _uiState.value = EditUiState.Error(e.message ?: "알 수 없는 오류")
+                } catch (e: Exception) {
+                    _uiState.value = EditUiState.Error("예기치 못한 오류가 발생했습니다.")
+                }
+            }
+        }
     }
 
     fun updateTitle(title: String) {

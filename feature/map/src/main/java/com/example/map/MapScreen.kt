@@ -69,7 +69,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MapScreen(
-    onEditClick: (PhotoUiModel) -> Unit,
+    onEditClick: (Long) -> Unit,
     padding: PaddingValues,
     viewModel: MapViewModel = hiltViewModel()
 ) {
@@ -191,7 +191,7 @@ fun MapScreen(
 @Composable
 fun PhotoBottomSheetScaffold(
     photo: PhotoUiModel,
-    onEditClick: (PhotoUiModel) -> Unit
+    onEditClick: (Long) -> Unit
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
@@ -233,7 +233,7 @@ fun PhotoBottomSheetScaffold(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TitleAndTag(photo)
-                    IconButton(onClick = { onEditClick(photo) }) {
+                    IconButton(onClick = { photo.id?.let { onEditClick(it) } }) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Edit",

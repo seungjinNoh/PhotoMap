@@ -32,13 +32,13 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +48,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoUiModel
@@ -55,62 +56,83 @@ import com.example.navigation.Route
 
 @Composable
 fun EditScreen(
-    photoUiModel: PhotoUiModel?,
     onBackClick: () -> Unit,
     onSelectLocationClick: (Route.SelectLocation) -> Unit,
     viewModel: EditViewModel = hiltViewModel()
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    var showErrorDialog by remember { mutableStateOf(false) }
+    var errorMessage by remember { mutableStateOf("") }
 
-    // 초기 진입 처리: null이면 새로 작성, 아니면 기존 정보로 수정
-    LaunchedEffect(Unit) {
-        when (uiState) {
-            is EditUiState.Loading -> {
-                if (photoUiModel == null) viewModel.createNewPhoto()
-                else viewModel.editExistingPhoto(photoUiModel)
-            }
-            else -> Unit
-        }
+    if (uiState is EditUiState.Error) {
+        val error = (uiState as EditUiState.Error)
+        errorMessage = error.message
+        showErrorDialog = true
     }
 
+    if (showErrorDialog) {
+        AlertDialog(
+            onDismissRequest = { showErrorDialog = false },
+            title = { Text("오류 발생") },
+            text = { Text(errorMessage) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showErrorDialog = false
+                    onBackClick()
+                }) {
+                    Text("확인")
+                }
+            }
+        )
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        EditTopBar(
-            photoUiModel,
-            onBackClick = onBackClick,
-            onSaveClick= { viewModel.savePhoto(onBackClick) },
-            onDeleteClick = { viewModel.deletePhoto(photoUiModel?.id, onBackClick) }
-        )
-
         Spacer(modifier = Modifier.height(4.dp))
 
-        if (uiState is EditUiState.Success) {
-            val photo = (uiState as EditUiState.Success).photoUiModel
-            var tagInput by remember { mutableStateOf("") }
+        when (uiState) {
+            is EditUiState.Success -> {
+                val photo = (uiState as EditUiState.Success).photoUiModel
+                var tagInput by remember { mutableStateOf("") }
 
-            EditContent(
-                title = photo.title,
-                onTitleChange = viewModel::updateTitle,
-                tagInput = tagInput,
-                onTagInputChange = { tagInput = it },
-                onAddTag = {
-                    if (tagInput.isNotBlank()) {
-                        viewModel.updateTags(photo.tags + tagInput.trim())
-                        tagInput = ""
+                EditTopBar(
+                    photoUiModel = photo,
+                    onBackClick = onBackClick,
+                    onSaveClick = { viewModel.savePhoto(onBackClick) },
+                    onDeleteClick = {
+                        if (photo.id != null) viewModel.deletePhoto(photo.id, onBackClick)
                     }
-                },
-                tags = photo.tags,
-                w3w = photo.w3w,
-                photoUri = photo.photoUri,
-                onRemoveTag = { tag -> viewModel.updateTags(photo.tags - tag) },
-                description = photo.description,
-                onDescriptionChange = viewModel::updateDescription,
-                onSelectLocationClick = onSelectLocationClick,
-                updatePhotoUri = viewModel::updatePhotoUri
-            )
-        } else {
-            Text("Loading...")
+                )
+
+                EditContent(
+                    title = photo.title,
+                    onTitleChange = { title -> viewModel.updateTitle(title) },
+                    tagInput = tagInput,
+                    onTagInputChange = { tagInput = it },
+                    onAddTag = {
+                        if (tagInput.isNotBlank()) {
+                            viewModel.updateTags(photo.tags + tagInput.trim())
+                            tagInput = ""
+                        }
+                    },
+                    tags = photo.tags,
+                    w3w = photo.w3w,
+                    photoUri = photo.photoUri,
+                    onRemoveTag = { tag -> viewModel.updateTags(photo.tags - tag) },
+                    description = photo.description,
+                    onDescriptionChange = { description -> viewModel.updateDescription(description) },
+                    onSelectLocationClick = onSelectLocationClick,
+                    updatePhotoUri = { uri -> viewModel.updatePhotoUri(uri) }
+                )
+            }
+
+            is EditUiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+
+            else -> Unit
         }
     }
 }
@@ -233,7 +255,7 @@ fun EditContent(
 
 @Composable
 fun EditTopBar(
-    photoUiModel: PhotoUiModel?,
+    photoUiModel: PhotoUiModel,
     onBackClick: () -> Unit,
     onSaveClick: () -> Unit,
     onDeleteClick: () -> Unit
@@ -284,7 +306,7 @@ fun EditTopBar(
         )
 
         Text(
-            text = if (photoUiModel != null) "편집하기" else "추가하기",
+            text = if (photoUiModel.id != null) "편집하기" else "추가하기",
             modifier = Modifier.align(Alignment.Center),
             style = androidx.compose.material3.MaterialTheme.typography.titleMedium
         )

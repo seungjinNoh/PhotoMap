@@ -43,7 +43,7 @@ import com.example.model.photo.PhotoUiModel
 
 @Composable
 fun HomeScreen(
-    onEditClick: (PhotoUiModel) -> Unit,
+    onEditClick: (Long) -> Unit,
     onAddClick: () -> Unit,
     onMapClick: () -> Unit,
     padding: PaddingValues = PaddingValues(),
@@ -77,7 +77,7 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         items(state.photos) { photo ->
-                            PhotoCard(photo = photo, onClick = { onEditClick(photo) })
+                            PhotoCard(photo = photo, onClick = { photo.id?.let(onEditClick) })
                         }
                     }
                 }

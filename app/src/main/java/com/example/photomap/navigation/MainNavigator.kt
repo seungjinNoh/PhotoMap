@@ -13,7 +13,6 @@ import com.example.edit.navigation.navigateEdit
 import com.example.edit.navigation.navigateSelectLocation
 import com.example.home.navigation.navigateHome
 import com.example.map.navigation.navigateMap
-import com.example.model.photo.PhotoUiModel
 import com.example.navigation.Route
 import com.example.photomap.MainTab
 import com.example.search.navigation.navigateSearch
@@ -60,8 +59,8 @@ internal class MainNavigator(
         navController.navigateHome(navOption)
     }
 
-    fun navigateEdit(photoUiModel: PhotoUiModel) {
-        navController.navigateEdit(photoUiModel)
+    fun navigateEdit(photoId: Long) {
+        navController.navigateEdit(photoId)
     }
 
     fun navigateMap() {

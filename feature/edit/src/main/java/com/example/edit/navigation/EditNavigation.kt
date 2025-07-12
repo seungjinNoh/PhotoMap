@@ -1,7 +1,6 @@
 package com.example.edit.navigation
 
 import android.annotation.SuppressLint
-import android.net.Uri
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -14,14 +13,10 @@ import androidx.navigation.toRoute
 import com.example.edit.EditScreen
 import com.example.edit.EditViewModel
 import com.example.edit.SelectLocationScreen
-import com.example.model.photo.PhotoUiModel
 import com.example.navigation.Route
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
-fun NavController.navigateEdit(photoUiModel: PhotoUiModel) {
-    val photoUiModelJson = Uri.encode(Json.encodeToString(photoUiModel))
-    navigate("edit_screen?photoUiModel=$photoUiModelJson")
+fun NavController.navigateEdit(photoId: Long) {
+    navigate("edit_screen?photoId=$photoId")
 }
 
 fun NavController.navigateEdit() {
@@ -41,27 +36,23 @@ fun NavGraphBuilder.editNavGraph(
 
     navigation(
         route = "edit_root",
-        startDestination = "edit_screen?photoUiModel={photoUiModel}"
+        startDestination = "edit_screen?photoId={photoId}"
     ) {
         composable(
-            route = "edit_screen?photoUiModel={photoUiModel}",
+            route = "edit_screen?photoId={photoId}",
             arguments = listOf(
-                navArgument("photoUiModel") {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
+                navArgument("photoId") {
+                    type = NavType.LongType
+                    defaultValue = -1
                 }
             )
-        ) { navBackStackEntry ->
+        ) {
             val parentEntry = remember { navController.getBackStackEntry("edit_root") }
             val viewModel: EditViewModel = hiltViewModel(parentEntry)
-            val photoUiModelJson = navBackStackEntry.arguments?.getString("photoUiModel")
-            val photoUiModel = photoUiModelJson?.let { Json.decodeFromString<PhotoUiModel>(it) }
 
             EditScreen(
-                photoUiModel = photoUiModel,
                 onBackClick = onBackClick,
-                onSelectLocationClick =  onSelectLocationClick,
+                onSelectLocationClick = onSelectLocationClick,
                 viewModel = viewModel
             )
         }

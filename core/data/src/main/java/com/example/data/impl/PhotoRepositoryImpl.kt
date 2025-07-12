@@ -17,6 +17,11 @@ class PhotoRepositoryImpl @Inject constructor(
             .map { list -> list.map { it.toDomain() } }
     }
 
+    override suspend fun getPhotoById(id: Long): Photo? {
+        return dao.getPhotoById(id)?.toDomain()
+            ?: throw NoSuchElementException("Photo with id $id not found")
+    }
+
     override suspend fun insertPhoto(photo: Photo) {
         dao.insert(PhotoEntity.fromDomain(photo))
     }

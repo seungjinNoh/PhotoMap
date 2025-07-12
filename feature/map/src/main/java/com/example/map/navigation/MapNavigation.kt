@@ -5,7 +5,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.example.map.MapScreen
-import com.example.model.photo.PhotoUiModel
 import com.example.navigation.MainTabRoute
 
 fun NavController.navigateMap() {
@@ -13,7 +12,7 @@ fun NavController.navigateMap() {
 }
 
 fun NavGraphBuilder.mapNavGraph(
-    onEditClick: (PhotoUiModel) -> Unit,
+    onEditClick: (Long) -> Unit,
     padding: PaddingValues
 ) {
     composable<MainTabRoute.Map> {
