@@ -9,7 +9,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import androidx.navigation.toRoute
 import com.example.edit.EditScreen
 import com.example.edit.EditViewModel
 import com.example.edit.SelectLocationScreen
@@ -57,14 +56,10 @@ fun NavGraphBuilder.editNavGraph(
             )
         }
 
-        composable<Route.SelectLocation> { navBackStackEntry ->
+        composable<Route.SelectLocation> {
             val parentEntry = remember { navController.getBackStackEntry("edit_root") }
             val viewModel: EditViewModel = hiltViewModel(parentEntry)
-            val latitude = navBackStackEntry.toRoute<Route.SelectLocation>().latitude
-            val longitude = navBackStackEntry.toRoute<Route.SelectLocation>().longitude
             SelectLocationScreen(
-                latitude = latitude,
-                longitude = longitude,
                 onBackClick = onBackClick,
                 viewModel = viewModel
             )

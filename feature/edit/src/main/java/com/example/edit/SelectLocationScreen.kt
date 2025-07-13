@@ -2,11 +2,8 @@ package com.example.edit
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.edit.model.EditUiState
@@ -26,6 +23,7 @@ import com.example.utils.location.LocationProvider
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -33,8 +31,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 internal fun SelectLocationScreen(
-    latitude: Double,
-    longitude: Double,
     onBackClick: () -> Unit,
     viewModel: EditViewModel = hiltViewModel()
 ) {
@@ -48,7 +44,6 @@ internal fun SelectLocationScreen(
 
     val defaultLatLng = LatLng(37.5665, 126.9780)
 
-    // 1. 초기 카메라 이동 처리
     LaunchedEffect(uiState) {
         val photo = (uiState as? EditUiState.Success)?.photoUiModel
         val targetLatLng = when {
@@ -71,6 +66,9 @@ internal fun SelectLocationScreen(
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState,
+                uiSettings = MapUiSettings(
+                    zoomControlsEnabled = false
+                ),
                 onMapClick = { latLng ->
                     selectedLatLng = latLng
                     viewModel.viewModelScope.launch {
@@ -96,30 +94,27 @@ internal fun SelectLocationScreen(
                         title = w3wAddress,
                         snippet = latLngSnippet,
                         onClick = {
-                            false // 기본 동작(정보창 표시)을 그대로 유지
+                            false
                         }
                     )
                 }
             }
-        }
 
-        Spacer(Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                val latLng = selectedLatLng
-                val w3w = w3wAddress
-                if (latLng != null && w3w != null) {
-                    viewModel.updateLocation(latLng.latitude, latLng.longitude, w3w)
-                    // 실제 w3w는 viewModel.updateLocation 내부에서 처리됨
-                    onBackClick()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-        ) {
-            Text("선택한 위치 저장")
+            Button(
+                onClick = {
+                    val latLng = selectedLatLng
+                    val w3w = w3wAddress
+                    if (latLng != null && w3w != null) {
+                        viewModel.updateLocation(latLng.latitude, latLng.longitude, w3w)
+                        onBackClick()
+                    }
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            ) {
+                Text("선택한 위치 저장")
+            }
         }
     }
 }
