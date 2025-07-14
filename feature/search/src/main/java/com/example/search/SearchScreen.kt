@@ -85,9 +85,7 @@ fun SearchScreen(
 }
 
 @Composable
-fun SearchTopBar(
-
-) {
+fun SearchTopBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -96,7 +94,7 @@ fun SearchTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "검색",
+            text = "사진 찾기",
             style = MaterialTheme.typography.titleLarge
         )
     }
