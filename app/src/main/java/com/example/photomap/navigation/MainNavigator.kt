@@ -34,7 +34,8 @@ internal class MainNavigator(
 
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
+            // todo Route 전체 수정 필요
+            popUpTo("com.example.navigation.MainTabRoute.Home") {
                 saveState = true
             }
             launchSingleTop = true
@@ -42,12 +43,10 @@ internal class MainNavigator(
         }
 
         when (tab) {
-            // todo 각각의 navigate로 바꾸기
             MainTab.HOME -> navController.navigateHome(navOptions)
             MainTab.SEARCH -> navController.navigateSearch(navOptions)
         }
     }
-
 
     // Splash -> Home
     fun navigateHome() {
