@@ -21,11 +21,8 @@ class MapViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<MapUiState>(MapUiState.Loading)
     val uiState: StateFlow<MapUiState> = _uiState
 
-    private val _markerIcon = MutableStateFlow<List<Map<Long, BitmapDescriptor?>>>(emptyList())
-    val markerIcon: StateFlow<List<Map<Long, BitmapDescriptor?>>> = _markerIcon
-
-    private val _requestedPhotoMarker = MutableStateFlow<List<PhotoUiModel>>(emptyList())
-    val requestedPhotoMarker: StateFlow<List<PhotoUiModel>> = _requestedPhotoMarker
+    private val _markerIcon = MutableStateFlow<Map<Long, BitmapDescriptor?>>(emptyMap())
+    val markerIcon: StateFlow<Map<Long, BitmapDescriptor?>> = _markerIcon
 
     init {
         viewModelScope.launch {
@@ -48,23 +45,8 @@ class MapViewModel @Inject constructor(
         }
     }
 
-    fun setMarkerIcons(icons: List<Map<Long, BitmapDescriptor?>>) {
+    fun setMarkerIcons(icons: Map<Long, BitmapDescriptor?>) {
         _markerIcon.value = icons
-    }
-
-    fun requestPhotoMarker(photos: List<PhotoUiModel>) {
-        _requestedPhotoMarker.value = photos
-    }
-
-    fun refreshPhotos() {
-        viewModelScope.launch {
-            getAllPhotoUseCase().collect { photoList ->
-                _uiState.value = MapUiState.Success(
-                    photoUiModelList = photoList.map { it.toUiModel() },
-                    selectedPhoto = null
-                )
-            }
-        }
     }
 
 }

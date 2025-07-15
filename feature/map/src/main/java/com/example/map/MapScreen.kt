@@ -35,7 +35,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
@@ -64,7 +64,6 @@ import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -74,8 +73,9 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel()
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
-    val photoMarkerIcons by viewModel.markerIcon.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val markerIcons by viewModel.markerIcon.collectAsStateWithLifecycle()
+
     val cameraPositionState = rememberCameraPositionState()
     var cameraInitialized by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -84,30 +84,11 @@ fun MapScreen(
         mapType = MapType.NORMAL
     )
 
-    val photoList by viewModel.requestedPhotoMarker.collectAsState()
-
-    LaunchedEffect(photoList) {
-        val icons = mutableListOf<Map<Long, BitmapDescriptor>>()
-        photoList.forEach { photo ->
-            val icon = createMarkerBitmapDescriptor(
-                context = context,
-                photoUri = photo.photoUri
-            )
-            icons.add(mapOf(photo.id!! to icon))
-        }
-        viewModel.setMarkerIcons(icons)
-    }
-
-    LaunchedEffect(Unit) {
-        delay(5000)
-        viewModel.refreshPhotos()
-    }
+    val selectedPhoto = (uiState as? MapUiState.Success)?.selectedPhoto
 
     LaunchedEffect(uiState) {
         if (uiState is MapUiState.Success) {
             val photos = (uiState as MapUiState.Success).photoUiModelList
-            viewModel.requestPhotoMarker(photos)
-
 
             if (!cameraInitialized) {
                 val location = locationProvider.getCurrentLocation()
@@ -117,10 +98,17 @@ fun MapScreen(
                 cameraInitialized = true
             }
 
+            val icons = withContext(Dispatchers.IO) {
+                photos.mapNotNull { photo ->
+                    photo.id?.let { id ->
+                        val icon = createMarkerBitmapDescriptor(context, photo.photoUri)
+                        id to icon
+                    }
+                }.toMap()
+            }
+            viewModel.setMarkerIcons(icons)
         }
     }
-
-    val selectedPhoto = (uiState as? MapUiState.Success)?.selectedPhoto
 
     LaunchedEffect(selectedPhoto) {
         selectedPhoto?.let {
@@ -159,7 +147,7 @@ fun MapScreen(
                     if (photo.latitude != null && photo.longitude != null) {
                         Marker(
                             state = MarkerState(position = LatLng(photo.latitude!!, photo.longitude!!)),
-                            icon = photoMarkerIcons.find { it.containsKey(photo.id!!) }?.get(photo.id),
+                            icon = markerIcons[photo.id],
                             zIndex = 999f,
                             onClick = {
                                 viewModel.selectPhoto(photo)
@@ -170,8 +158,6 @@ fun MapScreen(
 
                 }
             }
-
-
         }
 
         if (uiState is MapUiState.Success) {
@@ -226,7 +212,6 @@ fun PhotoBottomSheetScaffold(
                     .background(color = Color.White)
                     .padding(horizontal = 9.dp, vertical = 4.dp)
             ) {
-//                TitleAndTag(photo)
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
