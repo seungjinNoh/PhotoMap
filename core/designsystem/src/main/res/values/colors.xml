@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary -->
+    <color name="photo_primary">#FF7043</color> <!-- Deep Orange -->
+
+    <!-- Background -->
+    <color name="photo_background">#FFFFFF</color>
+    <color name="photo_background_dark">#121212</color>
+
+    <!-- Bottom Icons -->
+    <color name="photo_bottom_icon">#9E9E9E</color>         <!-- Grey -->
+    <color name="photo_bottom_icon_selected">#FF7043</color>
+    <color name="photo_bottom_icon_dark">#BDBDBD</color>
+    <color name="photo_bottom_icon_dark_selected">#FF8A65</color>
+
+    <!-- Icon -->
+    <color name="photo_icon">#616161</color>
+    <color name="photo_icon_dark">#E0E0E0</color>
+
+    <!-- Text Title -->
+    <color name="photo_text_title">#212121</color>
+    <color name="photo_text_title_dark">#FFFFFF</color>
+
+    <!-- Edit Tag -->
+    <color name="photo_edit_tag">#FFCC80</color> <!-- Light orange -->
+    <color name="photo_edit_tag_dark">#FFB74D</color>
+
+    <!-- Edit Text -->
+    <color name="photo_edit_text">#424242</color>
+    <color name="photo_edit_text_dark">#E0E0E0</color>
+    <color name="photo_edit_text_selected">#FF7043</color>
+    <color name="photo_edit_text_selected_dark">#FF8A65</color>
+
+    <!-- Button -->
+    <color name="photo_button">#FF7043</color>
+    <color name="photo_button_dark">#FF8A65</color>
+
+    <!-- Photo Select -->
+    <color name="photo_select">#D1C4E9</color> <!-- Light purple -->
+    <color name="photo_select_dark">#9575CD</color>
+
+    <!-- Search Tag Text -->
+    <color name="photo_search_tag_text">#616161</color>
+    <color name="photo_search_tag_text_dark">#E0E0E0</color>
+</resources>

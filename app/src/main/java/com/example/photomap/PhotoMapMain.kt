@@ -3,6 +3,9 @@ package com.example.photomap
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -11,15 +14,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.photomap.navigation.MainNavHost
 import com.example.photomap.navigation.rememberMainNavigator
+import com.example.photomap.ui.theme.PhotoMapTheme
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun PhotoMapMain() {
+
     val context = LocalContext.current
     val mainNavigator = rememberMainNavigator()
     var lastBackPressTime by remember { mutableStateOf(0L) }
@@ -35,25 +45,27 @@ fun PhotoMapMain() {
         }
     }
 
-    Scaffold(
-        modifier = Modifier,
-        content = { padding ->
-            MainNavHost(
-                mainNavigator = mainNavigator,
-                padding = padding
-            )
-        },
-        bottomBar = {
-            MainBottomBar(
-                modifier = Modifier
-                    .navigationBarsPadding()
-                    .padding(bottom = 20.dp),
-                visible = mainNavigator.shouldShowBottomBar(),
-                tabs = MainTab.entries.toPersistentList(),
-                currentTab = mainNavigator.currentTab,
-                onTabSelected = { mainNavigator.navigate(it) }
-            )
-        }
-    )
-
+    PhotoMapTheme {
+        val mainNavigator = rememberMainNavigator()
+        Scaffold(
+            modifier = Modifier,
+            content = { padding ->
+                MainNavHost(
+                    mainNavigator = mainNavigator,
+                    padding = padding
+                )
+            },
+            bottomBar = {
+                MainBottomBar(
+                    modifier = Modifier
+                        .navigationBarsPadding()
+                        .padding(bottom = 20.dp),
+                    visible = mainNavigator.shouldShowBottomBar(),
+                    tabs = MainTab.entries.toPersistentList(),
+                    currentTab = mainNavigator.currentTab,
+                    onTabSelected = { mainNavigator.navigate(it) }
+                )
+            }
+        )
+    }
 }
