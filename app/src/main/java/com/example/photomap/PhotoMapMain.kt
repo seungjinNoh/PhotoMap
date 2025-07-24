@@ -3,9 +3,6 @@ package com.example.photomap
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import android.app.Activity
-import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,12 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.photomap.navigation.MainNavHost
@@ -46,7 +38,6 @@ fun PhotoMapMain() {
     }
 
     PhotoMapTheme {
-        val mainNavigator = rememberMainNavigator()
         Scaffold(
             modifier = Modifier,
             content = { padding ->
