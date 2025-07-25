@@ -1,6 +1,7 @@
 package com.example.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,12 +33,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.example.designsystem.theme.PhotoMapTheme
 import com.example.home.model.HomeUiState
 import com.example.model.photo.PhotoUiModel
 
@@ -56,6 +57,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .background(color = PhotoMapTheme.colors.background)
     ) {
         HomeTopBar(
             onAddClick = onAddClick,
@@ -127,7 +129,8 @@ fun HomeTopBar(
     ) {
         Text(
             text = "사진첩",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = PhotoMapTheme.colors.textTitle
         )
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -137,7 +140,9 @@ fun HomeTopBar(
                 modifier = Modifier
                     .clickable(onClick = onAddClick)
                     .padding(4.dp)
-                    .size(28.dp)
+                    .size(28.dp),
+                tint = PhotoMapTheme.colors.icon
+
             )
 
             Icon(
@@ -146,7 +151,8 @@ fun HomeTopBar(
                 modifier = Modifier
                     .clickable(onClick = onMapClick)
                     .padding(4.dp)
-                    .size(28.dp)
+                    .size(28.dp),
+                tint = PhotoMapTheme.colors.icon
             )
         }
     }
@@ -170,7 +176,7 @@ fun EmptyScreen(
                 .size(130.dp)
                 .clickable(onClick = onAddClick)
             ,
-            tint = Color.Black
+            tint = PhotoMapTheme.colors.icon
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -178,7 +184,7 @@ fun EmptyScreen(
         Text(
             text = "사진을 추가해보세요!",
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Black
+            color = PhotoMapTheme.colors.textTitle
         )
     }
 }

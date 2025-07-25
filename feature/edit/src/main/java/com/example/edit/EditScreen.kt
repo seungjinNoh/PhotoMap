@@ -27,15 +27,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -50,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.example.designsystem.theme.PhotoMapTheme
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoUiModel
 import com.example.navigation.Route
@@ -73,21 +78,27 @@ fun EditScreen(
 
     if (showErrorDialog) {
         AlertDialog(
+            containerColor = PhotoMapTheme.colors.background,
             onDismissRequest = { showErrorDialog = false },
-            title = { Text("오류 발생") },
+            title = { Text("오류 발생", color = PhotoMapTheme.colors.textTitle) },
             text = { Text(errorMessage) },
             confirmButton = {
                 TextButton(onClick = {
                     showErrorDialog = false
                     onBackClick()
                 }) {
-                    Text("확인")
+                    Text("확인", color = PhotoMapTheme.colors.textTitle)
                 }
             }
         )
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(color = PhotoMapTheme.colors.background)
+    ) {
         Spacer(modifier = Modifier.height(4.dp))
 
         when (uiState) {
@@ -157,9 +168,15 @@ fun EditContent(
         OutlinedTextField(
             value = title,
             onValueChange = onTitleChange,
-            label = { Text("제목") },
-            placeholder = { Text("제목을 입력하세요.") },
-            modifier = Modifier.fillMaxWidth()
+            label = { Text("제목", color = PhotoMapTheme.colors.editText) },
+            placeholder = { Text("제목을 입력하세요.", color = PhotoMapTheme.colors.editText) },
+            modifier = Modifier.fillMaxWidth(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
+                unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                focusedTextColor = PhotoMapTheme.colors.editText,
+                unfocusedTextColor = PhotoMapTheme.colors.editText
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -168,13 +185,24 @@ fun EditContent(
             OutlinedTextField(
                 value = tagInput,
                 onValueChange = onTagInputChange,
-                label = { Text("태그") },
-                placeholder = { Text("태그를 추가하세요.") },
-                modifier = Modifier.weight(1f)
+                label = { Text("태그", color = PhotoMapTheme.colors.editTag) },
+                placeholder = { Text("태그를 추가하세요.", color = PhotoMapTheme.colors.editText) },
+                modifier = Modifier.weight(1f),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
+                    unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                    focusedTextColor = PhotoMapTheme.colors.editText,
+                    unfocusedTextColor = PhotoMapTheme.colors.editText
+                )
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Button(onClick = onAddTag) {
-                Text("추가")
+            Button(
+                onClick = onAddTag,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = PhotoMapTheme.colors.button
+                )
+            ) {
+                Text("추가", color = PhotoMapTheme.colors.textTitle)
             }
         }
 
@@ -207,9 +235,16 @@ fun EditContent(
         OutlinedTextField(
             value = description,
             onValueChange = onDescriptionChange,
-            label = { Text("설명") },
+            label = { Text("설명", color = PhotoMapTheme.colors.editTag) },
+            placeholder = { Text("설명을 입력하세요.", color = PhotoMapTheme.colors.editText) },
             modifier = Modifier.fillMaxWidth(),
-            maxLines = 5
+            maxLines = 5,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
+                unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                focusedTextColor = PhotoMapTheme.colors.editText,
+                unfocusedTextColor = PhotoMapTheme.colors.editText
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -225,11 +260,17 @@ fun EditContent(
                 onValueChange = {},  // 입력 차단
                 readOnly = true,     // 키보드 안 뜨게
                 interactionSource = dummyInteraction, // 클릭 효과 제거
-                label = { Text("w3w") },
-                placeholder = { Text("w3w 주소") },
+                label = { Text("w3w", color = PhotoMapTheme.colors.editTag) },
+                placeholder = { Text("w3w 주소", color = PhotoMapTheme.colors.editText) },
                 modifier = Modifier
                     .weight(1f)
-                    .heightIn(min = 56.dp)
+                    .heightIn(min = 56.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
+                    unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                    focusedTextColor = PhotoMapTheme.colors.editText,
+                    unfocusedTextColor = PhotoMapTheme.colors.editText
+                )
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -243,7 +284,8 @@ fun EditContent(
                         val latitude = 0.0
                         val longitude = 0.0
                         onSelectLocationClick(Route.SelectLocation(latitude, longitude))
-                    }
+                    },
+                tint = PhotoMapTheme.colors.icon
             )
         }
         ImagePicker(
@@ -264,13 +306,14 @@ fun EditTopBar(
 
     if (showDeleteDialog) {
         AlertDialog(
+            containerColor = PhotoMapTheme.colors.background,
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text("사진 삭제") },
-            text = { Text("정말로 이 사진을 삭제하시겠습니까?") },
+            title = { Text("사진 삭제", color = PhotoMapTheme.colors.textTitle) },
+            text = { Text("정말로 이 사진을 삭제하시겠습니까?", color = PhotoMapTheme.colors.textTitle) },
             confirmButton = {
                 Text(
                     text = "삭제",
-                    color = MaterialTheme.colorScheme.error,
+                    color = PhotoMapTheme.colors.textTitle,
                     modifier = Modifier
                         .clickable {
                             showDeleteDialog = false
@@ -282,6 +325,7 @@ fun EditTopBar(
             dismissButton = {
                 Text(
                     text = "취소",
+                    color = PhotoMapTheme.colors.textTitle,
                     modifier = Modifier
                         .clickable { showDeleteDialog = false }
                         .padding(16.dp)
@@ -302,32 +346,38 @@ fun EditTopBar(
                 .align(Alignment.CenterStart)
                 .padding(start = 12.dp)
                 .size(24.dp)
-                .clickable(onClick = onBackClick)
+                .clickable(onClick = onBackClick),
+            tint = PhotoMapTheme.colors.icon
         )
 
         Text(
             text = if (photoUiModel.id != null) "편집하기" else "추가하기",
             modifier = Modifier.align(Alignment.Center),
-            style = androidx.compose.material3.MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            color = PhotoMapTheme.colors.textTitle
         )
 
         Row(modifier = Modifier.align(Alignment.CenterEnd)) {
-            if (photoUiModel != null) {
-                Text(
-                    text = "삭제",
+            if (photoUiModel?.id != null) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "삭제",
                     modifier = Modifier
                         .padding(end = 20.dp)
-                        .clickable{ showDeleteDialog = true },
-                    color = MaterialTheme.colorScheme.error
+                        .clickable { showDeleteDialog = true }
+                        .size(24.dp),
+                    tint = PhotoMapTheme.colors.icon
                 )
             }
 
-            Text(
-                text = "저장",
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = "저장",
                 modifier = Modifier
                     .padding(end = 12.dp)
-                    .clickable(onClick = onSaveClick),
-                color = MaterialTheme.colorScheme.primary
+                    .clickable(onClick = onSaveClick)
+                    .size(24.dp),
+                tint = PhotoMapTheme.colors.icon
             )
         }
     }
@@ -353,6 +403,7 @@ fun ImagePicker(
         Text(
             text = "사진",
             style = MaterialTheme.typography.titleMedium,
+            color = PhotoMapTheme.colors.textTitle,
             modifier = Modifier.padding(bottom = 8.dp)
         )
 
@@ -362,7 +413,7 @@ fun ImagePicker(
                 .fillMaxWidth()
                 .height(250.dp)
                 .clickable { launcher.launch("image/*") }
-                .background(Color.LightGray.copy(alpha = 0.2f), shape = RoundedCornerShape(12.dp)),
+                .background(PhotoMapTheme.colors.photoSelect, shape = RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
             if (!currentUri.isNullOrBlank()) {
@@ -385,7 +436,7 @@ fun ImagePicker(
                         imageVector = Icons.Default.Face,
                         contentDescription = "기본 카메라 아이콘",
                         modifier = Modifier.size(40.dp),
-                        tint = Color.Gray
+                        tint = PhotoMapTheme.colors.icon
                     )
                 }
             }

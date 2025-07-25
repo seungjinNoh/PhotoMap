@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.designsystem.theme.PhotoMapTheme
 import com.example.edit.model.EditUiState
 import com.example.utils.location.LocationProvider
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -111,9 +113,13 @@ internal fun SelectLocationScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = PhotoMapTheme.colors.button
+                )
             ) {
-                Text("선택한 위치 저장")
+                Text("선택한 위치 저장", color = PhotoMapTheme.colors.textTitle)
+
             }
         }
     }

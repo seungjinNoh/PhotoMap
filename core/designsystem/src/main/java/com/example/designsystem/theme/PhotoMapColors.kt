@@ -10,7 +10,6 @@ import com.example.designsystem.R
 public data class PhotoMapColors(
     val background: Color,
     val bottomIcon: Color,
-    val bottomIconDark: Color,
     val bottomIconSelected: Color,
     val icon: Color,
     val textTitle: Color,
@@ -20,6 +19,7 @@ public data class PhotoMapColors(
     val button: Color,
     val photoSelect: Color,
     val searchTagText: Color,
+    val popupBackground: Color
 ) {
 
     companion object {
@@ -28,7 +28,6 @@ public data class PhotoMapColors(
         fun defaultLightColors(): PhotoMapColors = PhotoMapColors(
             background = colorResource(id = R.color.photo_background),
             bottomIcon = colorResource(id = R.color.photo_bottom_icon),
-            bottomIconDark = colorResource(id = R.color.photo_bottom_icon_dark),
             bottomIconSelected = colorResource(id = R.color.photo_bottom_icon_selected),
             icon = colorResource(id = R.color.photo_icon),
             textTitle = colorResource(id = R.color.photo_text_title),
@@ -37,23 +36,24 @@ public data class PhotoMapColors(
             editTextSelected = colorResource(id = R.color.photo_edit_text_selected),
             button = colorResource(id = R.color.photo_button),
             photoSelect = colorResource(id = R.color.photo_select),
-            searchTagText = colorResource(id = R.color.photo_search_tag_text)
+            searchTagText = colorResource(id = R.color.photo_search_tag_text),
+            popupBackground = colorResource(id = R.color.popup_background)
         )
 
         @Composable
         fun defaultDarkColors(): PhotoMapColors = PhotoMapColors(
             background = colorResource(id = R.color.photo_background_dark),
             bottomIcon = colorResource(id = R.color.photo_bottom_icon_dark),
-            bottomIconDark = colorResource(id = R.color.photo_bottom_icon_dark), // same as light
             bottomIconSelected = colorResource(id = R.color.photo_bottom_icon_selected),
-            icon = colorResource(id = R.color.photo_icon),
-            textTitle = Color.White, // override with white for contrast
-            editTag = colorResource(id = R.color.photo_edit_tag),
-            editText = Color.LightGray,
-            editTextSelected = colorResource(id = R.color.photo_edit_text_selected),
+            icon = colorResource(id = R.color.photo_icon_dark),
+            textTitle = colorResource(id = R.color.photo_text_title_dark),
+            editTag = colorResource(id = R.color.photo_edit_tag_dark),
+            editText = colorResource(id = R.color.photo_edit_text_dark),
+            editTextSelected = colorResource(id = R.color.photo_edit_text_selected_dark),
             button = colorResource(id = R.color.photo_button_dark),
             photoSelect = colorResource(id = R.color.photo_select_dark),
-            searchTagText = Color.Gray
+            searchTagText = colorResource(id = R.color.photo_search_tag_text_dark),
+            popupBackground = colorResource(id = R.color.popup_background_dark)
         )
     }
 }

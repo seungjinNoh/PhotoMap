@@ -100,7 +100,11 @@ fun SplashScreen(
                 .background(PhotoMapTheme.colors.background),
             contentAlignment = Alignment.Center
         ) {
-            Text("PhotoMap", style = MaterialTheme.typography.headlineLarge)
+            Text(
+                text = "PhotoMap",
+                style = MaterialTheme.typography.headlineLarge,
+                color = PhotoMapTheme.colors.textTitle
+            )
         }
     } else {
         SplashPermissionRequestUI(

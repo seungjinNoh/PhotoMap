@@ -1,5 +1,6 @@
 plugins {
     id("photomap.android.library")
+    id("photomap.android.library.compose")
 }
 
 android {

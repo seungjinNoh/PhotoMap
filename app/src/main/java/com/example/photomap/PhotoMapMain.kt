@@ -3,8 +3,8 @@ package com.example.photomap
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -13,10 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
+import com.example.designsystem.theme.PhotoMapTheme
 import com.example.photomap.navigation.MainNavHost
 import com.example.photomap.navigation.rememberMainNavigator
-import com.example.photomap.ui.theme.PhotoMapTheme
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -50,7 +49,7 @@ fun PhotoMapMain() {
                 MainBottomBar(
                     modifier = Modifier
                         .navigationBarsPadding()
-                        .padding(bottom = 20.dp),
+                        .background(color = PhotoMapTheme.colors.background),
                     visible = mainNavigator.shouldShowBottomBar(),
                     tabs = MainTab.entries.toPersistentList(),
                     currentTab = mainNavigator.currentTab,

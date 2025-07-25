@@ -1,6 +1,7 @@
 package com.example.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.example.designsystem.theme.PhotoMapTheme
 import com.example.model.photo.PhotoUiModel
 import com.example.search.model.SearchUiState
 
@@ -47,13 +50,14 @@ fun SearchScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(padding)
+            .background(color = PhotoMapTheme.colors.background)
     ) {
         SearchTopBar()
 
         when (uiState) {
             is SearchUiState.Loading -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("로딩 중...")
+                    Text("로딩 중...", color = PhotoMapTheme.colors.textTitle)
                 }
             }
 
@@ -63,10 +67,17 @@ fun SearchScreen(
                 OutlinedTextField(
                     value = state.query,
                     onValueChange = viewModel::updateQuery,
-                    label = { Text("검색") },
+                    label = { Text("검색", color = PhotoMapTheme.colors.editTag) },
+                    placeholder = { Text("제목, 태그를 입력하세요.", color = PhotoMapTheme.colors.editText) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+                        .padding(horizontal = 16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
+                        unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                        focusedTextColor = PhotoMapTheme.colors.editText,
+                        unfocusedTextColor = PhotoMapTheme.colors.editText
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -95,7 +106,8 @@ fun SearchTopBar() {
     ) {
         Text(
             text = "사진 찾기",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = PhotoMapTheme.colors.textTitle
         )
     }
 }
@@ -126,10 +138,12 @@ fun SearchPhotoCard(
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically)
+                .background(color = PhotoMapTheme.colors.background)
         ) {
             Text(
                 text = photo.title,
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                color = PhotoMapTheme.colors.textTitle
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -139,7 +153,7 @@ fun SearchPhotoCard(
                     Text(
                         text = "#$tag",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
+                        color = PhotoMapTheme.colors.textTitle
                     )
                 }
             }

@@ -19,14 +19,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.example.designsystem.theme.PhotoMapTheme
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -86,9 +85,9 @@ private fun RowScope.MainBottomBarItem(
             imageVector = tab.imageVector,
             contentDescription = tab.contentDescription,
             tint = if (selected) {
-                Color.Blue
+                PhotoMapTheme.colors.bottomIconSelected
             } else {
-                MaterialTheme.colorScheme.outline
+                PhotoMapTheme.colors.bottomIcon
             },
             modifier = Modifier.size(34.dp),
         )
