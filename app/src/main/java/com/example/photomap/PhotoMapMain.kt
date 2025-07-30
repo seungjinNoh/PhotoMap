@@ -38,7 +38,7 @@ fun PhotoMapMain() {
 
     PhotoMapTheme {
         Scaffold(
-            modifier = Modifier,
+            modifier = Modifier.background(PhotoMapTheme.colors.background),
             content = { padding ->
                 MainNavHost(
                     mainNavigator = mainNavigator,
@@ -46,15 +46,16 @@ fun PhotoMapMain() {
                 )
             },
             bottomBar = {
-                MainBottomBar(
-                    modifier = Modifier
-                        .navigationBarsPadding()
-                        .background(color = PhotoMapTheme.colors.background),
-                    visible = mainNavigator.shouldShowBottomBar(),
-                    tabs = MainTab.entries.toPersistentList(),
-                    currentTab = mainNavigator.currentTab,
-                    onTabSelected = { mainNavigator.navigate(it) }
-                )
+                if (mainNavigator.shouldShowBottomBar()) {
+                    MainBottomBar(
+                        modifier = Modifier
+                            .navigationBarsPadding()
+                            .background(PhotoMapTheme.colors.background),
+                        tabs = MainTab.entries.toPersistentList(),
+                        currentTab = mainNavigator.currentTab,
+                        onTabSelected = { mainNavigator.navigate(it) }
+                    )
+                }
             }
         )
     }
