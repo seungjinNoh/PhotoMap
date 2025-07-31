@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,6 +69,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun MapScreen(
+    onBackClick: () -> Unit,
     onEditClick: (Long) -> Unit,
     padding: PaddingValues,
     viewModel: MapViewModel = hiltViewModel()
@@ -158,6 +160,23 @@ fun MapScreen(
 
                 }
             }
+        }
+
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(16.dp)
+                .background(
+                    color = Color.White,
+                    shape = RoundedCornerShape(12.dp)
+                )
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "뒤로가기",
+                tint = Color.Black
+            )
         }
 
         if (uiState is MapUiState.Success) {

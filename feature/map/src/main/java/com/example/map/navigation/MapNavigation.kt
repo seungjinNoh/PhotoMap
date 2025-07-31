@@ -12,11 +12,13 @@ fun NavController.navigateMap() {
 }
 
 fun NavGraphBuilder.mapNavGraph(
+    onBackClick: () -> Unit,
     onEditClick: (Long) -> Unit,
     padding: PaddingValues
 ) {
     composable<MainTabRoute.Map> {
         MapScreen(
+            onBackClick = onBackClick,
             onEditClick = onEditClick,
             padding = padding
         )

@@ -30,6 +30,7 @@ internal fun MainNavHost(
             padding = padding
         )
         mapNavGraph(
+            onBackClick = mainNavigator::popBackStack,
             onEditClick = { mainNavigator.navigateEdit(it) },
             padding = padding
         )
