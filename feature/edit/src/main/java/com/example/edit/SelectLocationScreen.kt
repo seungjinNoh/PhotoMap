@@ -41,7 +41,7 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
 @Composable
-internal fun SelectLocationScreen(
+fun SelectLocationScreen(
     onBackClick: () -> Unit,
     viewModel: EditViewModel = hiltViewModel()
 ) {

@@ -2,85 +2,58 @@ package com.example.photomap.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.example.edit.navigation.navigateEdit
-import com.example.edit.navigation.navigateSelectLocation
-import com.example.home.navigation.navigateHome
-import com.example.map.navigation.navigateMap
+import com.example.navigation.EditRoute
+import com.example.navigation.MainTabRoute
 import com.example.navigation.Route
 import com.example.photomap.MainTab
-import com.example.search.navigation.navigateSearch
 
-internal class MainNavigator(
+class MainNavigator(
     val navController: NavHostController
 ) {
 
-    private val currentDestination: NavDestination?
-        @Composable get() = navController
-            .currentBackStackEntryAsState().value?.destination
-
-    val startDestination = Route.Splash
-
-    val currentTab: MainTab?
-        @Composable get() = MainTab.find { tab ->
-            currentDestination?.hasRoute(tab::class) == true
-        }
-
     fun navigate(tab: MainTab) {
         val navOptions = navOptions {
-            // todo Route 전체 수정 필요
-            popUpTo("com.example.navigation.MainTabRoute.Home") {
-                saveState = true
-            }
             launchSingleTop = true
             restoreState = true
+            popUpTo<Route.Main> { saveState = true }
         }
 
         when (tab) {
-            MainTab.HOME -> navController.navigateHome(navOptions)
-            MainTab.SEARCH -> navController.navigateSearch(navOptions)
+            MainTab.HOME -> navigateHome(navOptions)
+            MainTab.SEARCH -> navigateSearch(navOptions)
         }
     }
 
-    // Splash -> Home
-    fun navigateHome() {
-        val navOption = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                inclusive = true
-            }
-        }
-        navController.navigateHome(navOption)
+    fun navigateHome(navOptions: NavOptions) {
+        navController.navigate(MainTabRoute.Home, navOptions)
     }
 
-    fun navigateEdit(photoId: Long) {
-        navController.navigateEdit(photoId)
+    fun navigateSearch(navOptions: NavOptions) {
+        navController.navigate(MainTabRoute.Search, navOptions)
+    }
+
+    fun navigateEdit(photoId: Long?) {
+        navController.navigate(EditRoute.Edit(photoId))
     }
 
     fun navigateMap() {
-        navController.navigateMap()
+        navController.navigate(Route.Map)
     }
 
     fun navigateEditAddMode() {
-        navController.navigateEdit()
+        navController.navigate(EditRoute.Edit(null))
     }
 
-    fun navigateSelectLocation(latitude: Double, longitude: Double) {
-        navController.navigateSelectLocation(latitude, longitude)
+    fun navigateSelectLocation() {
+        navController.navigate(EditRoute.SelectLocation)
     }
 
     fun popBackStack() {
         navController.popBackStack()
-    }
-
-    @Composable
-    fun shouldShowBottomBar() = MainTab.contains {
-        currentDestination?.hasRoute(it::class) == true
     }
 }
 

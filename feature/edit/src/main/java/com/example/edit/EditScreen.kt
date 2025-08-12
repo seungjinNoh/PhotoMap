@@ -57,12 +57,12 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.designsystem.theme.PhotoMapTheme
 import com.example.edit.model.EditUiState
 import com.example.model.photo.PhotoUiModel
-import com.example.navigation.Route
+import com.example.navigation.EditRoute
 
 @Composable
 fun EditScreen(
     onBackClick: () -> Unit,
-    onSelectLocationClick: (Route.SelectLocation) -> Unit,
+    onSelectLocationClick: (EditRoute.SelectLocation) -> Unit,
     viewModel: EditViewModel = hiltViewModel()
 ) {
 
@@ -161,7 +161,7 @@ fun EditContent(
     onRemoveTag: (String) -> Unit,
     description: String,
     onDescriptionChange: (String) -> Unit,
-    onSelectLocationClick: (Route.SelectLocation) -> Unit,
+    onSelectLocationClick: (EditRoute.SelectLocation) -> Unit,
     updatePhotoUri: (String) -> Unit
 ) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -283,7 +283,7 @@ fun EditContent(
                     .clickable {
                         val latitude = 0.0
                         val longitude = 0.0
-                        onSelectLocationClick(Route.SelectLocation(latitude, longitude))
+                        onSelectLocationClick(EditRoute.SelectLocation)
                     },
                 tint = PhotoMapTheme.colors.icon
             )

@@ -8,7 +8,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.navigation.MainTabRoute
 import com.example.navigation.Route
 
-internal enum class MainTab(
+enum class MainTab(
     val imageVector: ImageVector,
     internal val contentDescription: String,
     val route: MainTabRoute
