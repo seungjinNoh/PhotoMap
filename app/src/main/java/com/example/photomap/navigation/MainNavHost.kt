@@ -5,12 +5,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
 import com.example.designsystem.theme.PhotoMapTheme
 import com.example.edit.EditScreen
+import com.example.edit.EditViewModel
 import com.example.edit.SelectLocationScreen
 import com.example.home.HomeScreen
 import com.example.map.MapScreen
@@ -73,15 +77,29 @@ internal fun MainNavHost(
         }
 
         navigation<Route.EditFlow>(startDestination = EditRoute.Edit()) {
-            composable<EditRoute.Edit> {
+            composable<EditRoute.Edit> { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    mainNavigator.navController.getBackStackEntry(Route.EditFlow)
+                }
+                val viewModel: EditViewModel = hiltViewModel(parentEntry)
+
                 EditScreen(
                     onBackClick = mainNavigator::popBackStack,
                     onSelectLocationClick = { mainNavigator.navigateSelectLocation() },
+                    viewModel = viewModel
                 )
             }
 
-            composable<EditRoute.SelectLocation> {
-                SelectLocationScreen(onBackClick = mainNavigator::popBackStack)
+            composable<EditRoute.SelectLocation> { backStackEntry ->
+                val parentEntry = remember(backStackEntry) {
+                    mainNavigator.navController.getBackStackEntry(Route.EditFlow)
+                }
+                val viewModel: EditViewModel = hiltViewModel(parentEntry)
+
+                SelectLocationScreen(
+                    onBackClick = mainNavigator::popBackStack,
+                    viewModel = viewModel
+                )
             }
         }
 

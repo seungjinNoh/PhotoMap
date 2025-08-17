@@ -281,8 +281,6 @@ fun EditContent(
                 modifier = Modifier
                     .size(40.dp)
                     .clickable {
-                        val latitude = 0.0
-                        val longitude = 0.0
                         onSelectLocationClick(EditRoute.SelectLocation)
                     },
                 tint = PhotoMapTheme.colors.icon
