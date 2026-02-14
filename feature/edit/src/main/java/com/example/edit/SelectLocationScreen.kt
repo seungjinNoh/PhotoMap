@@ -117,14 +117,14 @@ fun SelectLocationScreen(
                     .align(Alignment.TopStart)
                     .padding(16.dp)
                     .background(
-                        color = Color.White,
+                        color = PhotoMapTheme.colors.background,
                         shape = RoundedCornerShape(12.dp)
                     )
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "뒤로가기",
-                    tint = Color.Black
+                    tint = PhotoMapTheme.colors.icon
                 )
             }
 
@@ -139,13 +139,22 @@ fun SelectLocationScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 24.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = PhotoMapTheme.colors.button
+                ),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 6.dp,
+                    pressedElevation = 8.dp
                 )
             ) {
-                Text("선택한 위치 저장", color = PhotoMapTheme.colors.textTitle)
-
+                Text(
+                    text = "선택한 위치 저장",
+                    color = Color.White,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
         }
     }

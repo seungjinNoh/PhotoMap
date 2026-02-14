@@ -2,6 +2,7 @@ package com.example.search
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -68,23 +71,31 @@ fun SearchScreen(
                     value = state.query,
                     onValueChange = viewModel::updateQuery,
                     label = { Text("검색", color = PhotoMapTheme.colors.editTag) },
-                    placeholder = { Text("제목, 태그를 입력하세요.", color = PhotoMapTheme.colors.editText) },
+                    placeholder = { Text("제목, 태그를 입력하세요.", color = PhotoMapTheme.colors.editText.copy(alpha = 0.6f)) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = 20.dp),
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = PhotoMapTheme.colors.editTextSelected,
-                        unfocusedBorderColor = PhotoMapTheme.colors.editText,
+                        focusedBorderColor = PhotoMapTheme.colors.button,
+                        unfocusedBorderColor = PhotoMapTheme.colors.editText.copy(alpha = 0.3f),
                         focusedTextColor = PhotoMapTheme.colors.editText,
-                        unfocusedTextColor = PhotoMapTheme.colors.editText
+                        unfocusedTextColor = PhotoMapTheme.colors.editText,
+                        focusedLabelColor = PhotoMapTheme.colors.button,
+                        unfocusedLabelColor = PhotoMapTheme.colors.editTag
                     )
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // query가 비어있지 않을 때만 리스트 표시
                 if (state.query.isNotBlank()) {
-                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         items(state.filteredPhotos) { photo ->
                             SearchPhotoCard(photo = photo, onClick = { photo.id?.let { onEditClick(it) } })
                         }
@@ -117,46 +128,72 @@ fun SearchPhotoCard(
     photo: PhotoUiModel,
     onClick: () -> Unit
 ) {
-    Row(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = PhotoMapTheme.colors.background
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(photo.photoUri),
-            contentDescription = "사진",
-            contentScale = ContentScale.Crop,
+        Row(
             modifier = Modifier
-                .size(80.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
-                .background(color = PhotoMapTheme.colors.background)
+                .fillMaxWidth()
+                .padding(12.dp)
         ) {
-            Text(
-                text = photo.title,
-                style = MaterialTheme.typography.titleMedium,
-                color = PhotoMapTheme.colors.textTitle
+            Image(
+                painter = rememberAsyncImagePainter(photo.photoUri),
+                contentDescription = "사진",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp))
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-            LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(photo.tags) { tag ->
-                    Text(
-                        text = "#$tag",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = PhotoMapTheme.colors.textTitle
-                    )
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(
+                    text = photo.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = PhotoMapTheme.colors.textTitle
+                )
+
+                if (photo.tags.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                        items(photo.tags) { tag ->
+                            SearchTag(tag = tag)
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun SearchTag(tag: String) {
+    val tagShape = RoundedCornerShape(12.dp)
+    val tagColor = PhotoMapTheme.colors.button
+
+    Box(
+        modifier = Modifier
+            .background(tagColor.copy(alpha = 0.1f), tagShape)
+            .border(1.dp, tagColor.copy(alpha = 0.3f), tagShape)
+            .padding(horizontal = 10.dp, vertical = 4.dp)
+    ) {
+        Text(
+            text = "#$tag",
+            style = MaterialTheme.typography.bodySmall,
+            color = PhotoMapTheme.colors.editText
+        )
     }
 }

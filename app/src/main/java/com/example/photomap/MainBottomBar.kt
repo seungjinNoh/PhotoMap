@@ -72,7 +72,7 @@ private fun RowScope.MainBottomBarItem(
             } else {
                 PhotoMapTheme.colors.bottomIcon
             },
-            modifier = Modifier.size(34.dp),
+            modifier = Modifier.size(28.dp),
         )
     }
 }

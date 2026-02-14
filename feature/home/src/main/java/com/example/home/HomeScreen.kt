@@ -133,28 +133,44 @@ fun HomeTopBar(
             color = PhotoMapTheme.colors.textTitle
         )
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Icon(
-                imageVector = Icons.Default.Add,
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            TopBarIconButton(
+                icon = Icons.Default.Add,
                 contentDescription = "추가",
-                modifier = Modifier
-                    .clickable(onClick = onAddClick)
-                    .padding(4.dp)
-                    .size(28.dp),
-                tint = PhotoMapTheme.colors.icon
-
+                onClick = onAddClick
             )
 
-            Icon(
-                imageVector = Icons.Default.LocationOn,
+            TopBarIconButton(
+                icon = Icons.Default.LocationOn,
                 contentDescription = "지도 보기",
-                modifier = Modifier
-                    .clickable(onClick = onMapClick)
-                    .padding(4.dp)
-                    .size(28.dp),
-                tint = PhotoMapTheme.colors.icon
+                onClick = onMapClick
             )
         }
+    }
+}
+
+@Composable
+private fun TopBarIconButton(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(44.dp)
+            .background(
+                color = PhotoMapTheme.colors.button.copy(alpha = 0.1f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            modifier = Modifier.size(24.dp),
+            tint = PhotoMapTheme.colors.button
+        )
     }
 }
 
